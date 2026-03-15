@@ -1,11 +1,11 @@
-from config import db
+from config import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
 
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
-    serialize_rules = ("-events_created.created_by",
+    serialize_rules = ("-events_created.created_by", "-password_hash",
                        "-event_participants.user", "-restaurants.user", "-events_created.participants")
 
     id = db.Column(db.Integer, primary_key=True)
@@ -19,6 +19,16 @@ class User(db.Model, SerializerMixin):
                                          back_populates="user",
                                          cascade="all, delete-orphan"
                                          )
+
+    # password hashing
+
+    def set_password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(
+            password.decode('utf-8'))
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(
+            self.password_hash, password)
 
     def __repr__(self):
         return f'<User {self.id}: {self.username} | email {self.email}'
