@@ -57,6 +57,42 @@ class Users(Resource):
 api.add_resource(Users, '/api/users')
 
 
+# Register User
+
+class Register(Resource):
+
+    def post(self):
+        data = request.get_json()
+
+        try:
+            user = User(
+                username=data.get("username"),
+                email=data.get("email")
+            )
+
+            user.set_password(data["password"])
+
+            db.session.add(user)
+            db.session.commit()
+
+            session['user_id'] = user.id
+
+            return make_response(
+                jsonify(user.to_dict()), 201
+            )
+
+        except IntegrityError:
+            db.session.rollback()
+
+            return make_response(
+                jsonify(
+                    {"error": "A user with this username or email already exists"}), 400
+            )
+
+
+api.add_resource(Register, '/api/register')
+
+
 # Events
 class Events(Resource):
     def get(self):
