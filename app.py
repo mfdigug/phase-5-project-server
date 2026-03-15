@@ -43,7 +43,7 @@ class Restaurants(Resource):
             )
 
 
-api.add_resource(Restaurants, '/restaurants')
+api.add_resource(Restaurants, '/api/restaurants')
 
 
 # Users
@@ -54,7 +54,7 @@ class Users(Resource):
         return make_response(jsonify(users), 200)
 
 
-api.add_resource(Users, '/users')
+api.add_resource(Users, '/api/users')
 
 
 # Events
@@ -65,7 +65,7 @@ class Events(Resource):
         return make_response(jsonify(events), 200)
 
 
-api.add_resource(Events, '/events')
+api.add_resource(Events, '/api/events')
 
 
 # EventPariticpants
@@ -76,4 +76,4 @@ class EventParticipants(Resource):
         return make_response(jsonify(event_participants), 200)
 
 
-api.add_resource(EventParticipants, '/event_participants')
+api.add_resource(EventParticipants, '/api/event_participants')
