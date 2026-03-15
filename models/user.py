@@ -1,0 +1,24 @@
+from config import db
+from sqlalchemy_serializer import SerializerMixin
+
+
+class User(db.Model, SerializerMixin):
+    __tablename__ = "users"
+
+    serialize_rules = ("-events_created.created_by",
+                       "-event_participants.user", "-restaurants.user", "-events_created.participants")
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, unique=True, nullable=False)
+    username = db.Column(db.String, unique=True, nullable=False)
+    password_hash = db.Column(db.String)   # for email/password login
+
+    restaurants = db.relationship(
+        "Restaurant", back_populates="user", cascade="all, delete-orphan")
+    event_participants = db.relationship("EventParticipant",
+                                         back_populates="user",
+                                         cascade="all, delete-orphan"
+                                         )
+
+    def __repr__(self):
+        return f'<User {self.id}: {self.username} | email {self.email}'
