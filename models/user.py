@@ -1,4 +1,4 @@
-from config import db, bcrypt
+from app import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
 
 

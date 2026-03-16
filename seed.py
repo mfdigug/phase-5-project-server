@@ -1,7 +1,7 @@
 from faker import Faker
 import random
 
-from config import app, db
+from app import app, db
 from models import User, Restaurant, Event, EventParticipant
 
 fake = Faker()
