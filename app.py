@@ -24,3 +24,4 @@ bcrypt = Bcrypt(app)
 CORS(app)
 
 api = Api(app)
+import routes
