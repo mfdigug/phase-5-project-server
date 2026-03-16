@@ -12,7 +12,7 @@ api.add_resource(Register, '/api/register')
 api.add_resource(Events, '/api/events')
 
 # EventParticipants
-api.add_resource(Events, '/api/events')
+api.add_resource(EventParticipants, '/api/event_participants')
 
 # Restaurants
 api.add_resource(Restaurants, '/api/restaurants')

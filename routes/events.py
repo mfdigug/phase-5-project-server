@@ -1,6 +1,7 @@
 from flask import jsonify, make_response, request, session
 from flask_restful import Resource
-from app import app, db, api
+from app import db
+from models import Event, User, EventParticipant, Restaurant
 
 
 class Events(Resource):
@@ -44,7 +45,7 @@ class Events(Resource):
                 participants.append(
                     EventParticipant(
                         event=event,
-                        uuser=User.query.get(user_id),
+                        user=User.query.get(user_id),
                         rsvp_status="invited"
                     )
                 )

@@ -1,9 +1,8 @@
 from flask import jsonify, make_response, request, session
 from flask_restful import Resource
-from app import app, db, api
+from app import db
 from sqlalchemy.exc import IntegrityError
-
-# Users
+from models import User
 
 
 class Users(Resource):
@@ -11,8 +10,6 @@ class Users(Resource):
         users = [user.to_dict()
                  for user in User.query.all()]
         return make_response(jsonify(users), 200)
-
-# Register User
 
 
 class Register(Resource):

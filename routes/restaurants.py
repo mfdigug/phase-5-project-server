@@ -1,6 +1,7 @@
 from flask import jsonify, make_response, request, session
 from flask_restful import Resource
-from app import app, db, api
+from app import db
+from models import Restaurant
 from sqlalchemy.exc import IntegrityError
 
 
