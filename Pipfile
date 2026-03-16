@@ -15,6 +15,7 @@ faker = "*"
 flask-bcrypt = "*"
 flask-login = "*"
 flask-dance = "*"
+flask-cors = "*"
 
 [dev-packages]
 
