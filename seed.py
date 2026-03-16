@@ -74,26 +74,27 @@ with app.app_context():
     participants = []
 
     for event in events:
-        creator = event.created_by
-
         # creator automatically attending
+        creator_user = User.query.get(event.created_by)
         participants.append(
             EventParticipant(
                 event=event,
-                user=User.query.get(creator),
+                user=creator_user,
                 rsvp_status="accepted"
             )
         )
 
         # 2 random invitees not the creator
-        invited_users = random.sample([u for u in users if u.id != creator], 2)
-        for user in invited_users:
-            participant = EventParticipant(
-                event=event,
-                user=user,
-                rsvp_status=random.choice(statuses)
+        invitee_users = random.sample(
+            [u for u in users if u.id != event.created_by], 2)
+        for user in invitee_users:
+            participants.append(
+                EventParticipant(
+                    event=event,
+                    user=user,
+                    rsvp_status="invited"
+                )
             )
-            participants.append(participant)
 
     db.session.add_all(participants)
     db.session.commit()

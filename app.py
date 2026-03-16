@@ -105,7 +105,7 @@ class Events(Resource):
 
         event = Event(
             title=data.get("title"),
-            date=data.get("date")
+            date=data.get("date"),
             cuisine_filter=data.get("cuisine_filter"),
             location_filter=data.get("location_filter"),
             price_filter=data.get("price_filter"),
