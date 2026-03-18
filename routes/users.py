@@ -75,7 +75,7 @@ class Logout(Resource):
 
     def delete(self):
 
-        session['user_id'] = None
+        session.pop('user_id', None)
         
         return {}, 204
 
