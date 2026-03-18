@@ -4,12 +4,22 @@ from app import db
 from sqlalchemy.exc import IntegrityError
 from models import User
 
-
 class Users(Resource):
     def get(self):
         users = [user.to_dict()
                  for user in User.query.all()]
         return make_response(jsonify(users), 200)
+
+
+class CheckSession(Resource):
+    def get(self):
+        user_id = session.get('user_id')
+
+        if user_id:
+            user = User.query.filter_by(id=user_id).first()
+            if user:
+                return make_response(jsonify(user.to_dict()), 200)
+        return make_response(jsonify({"error": "Unauthorised"}), 401)
 
 
 class Register(Resource):
