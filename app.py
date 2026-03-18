@@ -13,7 +13,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SESSION_COOKIE_SAMESITE'] = "None"
-app.config['SESSION_COOKIE_SECURE'] = True
+
+if os.environ.get("FLASK_ENV") == "development":
+    app.config['SESSION_COOKIE_SECURE'] = False
+else:
+    app.config['SESSION_COOKIE_SECURE'] = True
+
 app.json.compact = False
 
 @app.before_request
