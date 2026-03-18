@@ -12,12 +12,13 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-app.config['SESSION_COOKIE_SAMESITE'] = "None"
 
-if os.environ.get("FLASK_ENV") == "development":
-    app.config['SESSION_COOKIE_SECURE'] = False
-else:
-    app.config['SESSION_COOKIE_SECURE'] = True
+# app.config['SESSION_COOKIE_SAMESITE'] = "None"
+
+# if os.environ.get("FLASK_ENV") == "development":
+#     app.config['SESSION_COOKIE_SECURE'] = False
+# else:
+#     app.config['SESSION_COOKIE_SECURE'] = True
 
 app.json.compact = False
 
@@ -44,7 +45,7 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 bcrypt = Bcrypt(app)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
 api = Api(app)
 import routes
