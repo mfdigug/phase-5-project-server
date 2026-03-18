@@ -60,3 +60,12 @@ class Login(Resource):
         session['user_id'] = user.id
 
         return make_response(jsonify(user.to_dict()), 200)
+    
+class Logout(Resource):
+
+    def delete(self):
+
+        session['user_id'] = None
+        
+        return {}, 204
+
