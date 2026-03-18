@@ -41,3 +41,22 @@ class Register(Resource):
                 jsonify(
                     {"error": "A user with this username or email already exists"}), 400
             )
+    
+class Login(Resource):
+    def post(self):
+        data = request.get_json()
+        email = data.get("email")
+        password = data.get("password")
+
+        if not email or not password:
+            return make_response(jsonify({"error": "Email and password required"}), 400)
+        
+        user = User.query.filter(User.email == email).first()
+            
+        if not user or not user.authenticate(password):
+            return make_response(jsonify({"error": "Invalid credentials"}), 401)
+        
+        
+        session['user_id'] = user.id
+
+        return make_response(jsonify(user.to_dict()), 200)
