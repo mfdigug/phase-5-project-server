@@ -41,3 +41,27 @@ class Restaurants(Resource):
             return make_response(
                 jsonify({"error": "You already added this restaurant"}), 400
             )
+
+
+class RestaurantById(Resource):
+    def get(self, id):
+        
+        response_dict = Restaurant.query.filter_by(id=id).first().to_dict()
+        response = make_response(response_dict, 200)
+        return response
+    
+    def patch(self, id):
+        restaurant = Restaurant.query.filter(Restaurant.id == id).first()
+
+        data = request.get_json()
+
+        for attr in data:
+            setattr(restaurant, attr, data[attr])
+
+        db.session.commit()
+
+        return make_response(
+            restaurant.to_dict(),
+            200
+        )
+    
