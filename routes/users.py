@@ -13,13 +13,16 @@ class Users(Resource):
 
 class CheckSession(Resource):
     def get(self):
-        user_id = session.get('user_id')
+        user = User.query.first()
+        return make_response(jsonify(user.to_dict()), 200)
+        
+        # user_id = session.get('user_id')
 
-        if user_id:
-            user = User.query.filter_by(id=user_id).first()
-            if user:
-                return make_response(jsonify(user.to_dict()), 200)
-        return make_response(jsonify({"error": "Unauthorised"}), 401)
+        # if user_id:
+        #     user = User.query.filter_by(id=user_id).first()
+        #     if user:
+        #         return make_response(jsonify(user.to_dict()), 200)
+        # return make_response(jsonify({"error": "Unauthorised"}), 401)
 
 
 class Register(Resource):

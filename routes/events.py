@@ -6,6 +6,7 @@ from models import Event, User, EventParticipant, Restaurant
 
 class Events(Resource):
     def get(self):
+        
         events = [event.to_dict()
                   for event in Event.query.all()]
         return make_response(jsonify(events), 200)
@@ -56,3 +57,5 @@ class Events(Resource):
         return make_response(
             jsonify(event.to_dict()), 201
         )
+    
+

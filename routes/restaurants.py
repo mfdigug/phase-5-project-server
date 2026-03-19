@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 # Restaurants
 class Restaurants(Resource):
     def get(self):
-
+        
         restaurants = [restaurant.to_dict()
                        for restaurant in Restaurant.query.all()]
 

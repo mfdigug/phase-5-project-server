@@ -22,20 +22,20 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 app.json.compact = False
 
-@app.before_request
-def check_if_logged_in():
-    open_paths = [
-        '/api/login',
-        '/api/register',
-        '/api/check_session'
-    ]
+# @app.before_request
+# def check_if_logged_in():
+#     open_paths = [
+#         '/api/login',
+#         '/api/register',
+#         '/api/check_session'
+#     ]
 
-    if request.method == "OPTIONS":
-        return
+#     if request.method == "OPTIONS":
+#         return
 
-    if request.path.startswith("/api") and request.path not in open_paths:
-        if not session.get('user_id'):
-            return jsonify({"error": "Unauthorized"}), 401
+#     if request.path.startswith("/api") and request.path not in open_paths:
+#         if not session.get('user_id'):
+#             return jsonify({"error": "Unauthorised"}), 401
 
 metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
