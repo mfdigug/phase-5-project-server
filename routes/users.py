@@ -11,11 +11,21 @@ class Users(Resource):
         return make_response(jsonify(users), 200)
 
 
+class UserById(Resource):
+    def get(self, id):
+        user = User.query.filter_by(id=id).first()
+        
+        if not user:
+            return make_response({"error": "User not found"}, 404)
+        
+        return make_response(jsonify(user.to_dict()), 200)
+
+
 class CheckSession(Resource):
     def get(self):
         
         user_id = session.get("user_id")
-        
+
         if not user_id:
             return {"error": "Unauthorised"}, 401
 

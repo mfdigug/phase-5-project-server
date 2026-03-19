@@ -47,6 +47,7 @@ class RestaurantById(Resource):
     def get(self, id):
         
         response_dict = Restaurant.query.filter_by(id=id).first().to_dict()
+        
         response = make_response(response_dict, 200)
         return response
     
