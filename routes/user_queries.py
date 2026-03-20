@@ -23,16 +23,18 @@ class MyEvents(Resource):
         user = User.query.get(user_id)
         if not user:
             return make_response(jsonify({"error": "User not found"}), 404)
+        
+        created_events = Event.query.filter_by(created_by=user.id).all()
 
-        created_events = []
-        for e in user.events_created:
+        created_events_data = []
+        for e in user.created_events:
             participants = [
                 {"user_id": ep.user_id, "rsvp_status": ep.rsvp_status}
                 for ep in e.participants
             ]
             event_dict = e.to_dict()
             event_dict["participants"] = participants
-            created_events.append(event_dict)
+            created_events_data.append(event_dict)
 
         invited_events = []
         for ep in user.event_participants:
@@ -48,7 +50,7 @@ class MyEvents(Resource):
 
         return make_response(
             jsonify({
-                "created": created_events,
+                "created": created_events_data,
                 "invited": invited_events
             }),
             200
