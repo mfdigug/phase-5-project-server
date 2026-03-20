@@ -13,15 +13,12 @@ class Users(Resource):
 
 class UserById(Resource):
     def get(self, id):
-        return {"message": "THIS IS NEW CODE"}, 200
-   
-    # def get(self, id):
-    #     user = User.query.filter_by(id=id).first()
+        user = User.query.filter_by(id=id).first()
         
-    #     if not user:
-    #         return make_response({"error": "User not found"}, 404)
+        if not user:
+            return make_response({"error": "User not found"}, 404)
         
-    #     return make_response(jsonify(user.to_dict()), 200)
+        return make_response(jsonify(user.to_dict()), 200)
 
 
 class CheckSession(Resource):
