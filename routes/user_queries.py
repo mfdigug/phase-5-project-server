@@ -33,7 +33,7 @@ class MyEvents(Resource):
         created_events_data = []
         for e in created_events:
             participants = [
-                {"user_id": ep.user_id, "rsvp_status": ep.rsvp_status}
+                {"user_id": ep.user_id, "username": ep.user.username if ep.user else None, "rsvp_status": ep.rsvp_status}
                 for ep in e.participants
             ]
             event_dict = e.to_dict()
