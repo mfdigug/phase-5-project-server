@@ -5,7 +5,9 @@ from models import User, Event
 class MyRestaurants(Resource):
     def get(self):
 
-        user_id = session.get("user_id") or 1
+        user_id = session.get("user_id")
+        if not user_id:
+            return make_response(jsonify({"error": "Not logged in"}), 401)
 
         user = User.query.get(user_id)
         if not user:
@@ -18,7 +20,9 @@ class MyRestaurants(Resource):
 
 class MyEvents(Resource):
     def get(self):
-        user_id = session.get("user_id") or 1
+        user_id = session.get("user_id")
+        if not user_id:
+            return make_response(jsonify({"error": "Not logged in"}), 401)
 
         user = User.query.get(user_id)
         if not user:
@@ -27,7 +31,7 @@ class MyEvents(Resource):
         created_events = Event.query.filter_by(created_by=user.id).all()
 
         created_events_data = []
-        for e in user.created_events:
+        for e in created_events:
             participants = [
                 {"user_id": ep.user_id, "rsvp_status": ep.rsvp_status}
                 for ep in e.participants
@@ -39,9 +43,9 @@ class MyEvents(Resource):
         invited_events = []
         for ep in user.event_participants:
             e = ep.event
-            if e.created_by != user_id:
+            if e.created_by != int(user_id):
                 participants = [
-                    {"user_id": p.user_id, "username": p.user.username, "rsvp_status": p.rsvp_status}
+                    {"user_id": p.user_id, "username": p.user.username if p.user else None, "rsvp_status": p.rsvp_status}
                     for p in e.participants
                 ]
                 event_dict = e.to_dict()
