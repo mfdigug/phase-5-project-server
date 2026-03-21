@@ -24,7 +24,7 @@ api.add_resource(MyEvents, '/api/my_events')
 api.add_resource(Events, '/api/events')
 
 # Generate Restaurant
-api.add_resource(GenerateRestaurant, '/api/events/<int:id>/generate_restaurant')
+api.add_resource(GenerateRestaurant, '/api/events/<int:event_id>/generate_restaurant')
 
 # EventParticipants
 api.add_resource(EventParticipants, '/api/event_participants')
