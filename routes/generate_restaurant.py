@@ -68,7 +68,17 @@ class GenerateRestaurant(Resource):
         event.selected_restaurant = chosen
         db.session.commit()
 
-        return make_response(jsonify(chosen.to_dict()), 200)
+        return make_response(jsonify({
+        "chosen": chosen.to_dict(),
+        "debug": {
+            "attendees": [u.username for u in attendees],
+            "wishlist_count": len(wishlist_restaurants),
+            "filtered_count": len(filtered),
+            "best_score": best_score,
+            "candidates": [r.name for r in best_matches],
+            "selection_type": "filtered" if filtered else "scored_random"
+        }
+    }), 200)
 
 
 
