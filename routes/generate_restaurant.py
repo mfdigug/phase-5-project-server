@@ -69,7 +69,14 @@ class GenerateRestaurant(Resource):
         db.session.commit()
 
         return make_response(jsonify({
-        "chosen": chosen.to_dict(),
+         "chosen": {
+            "id": chosen.id,
+            "name": chosen.name,
+            "cuisine": chosen.cuisine,
+            "location": chosen.location,
+            "price_range": chosen.price_range,
+            "status": chosen.status
+        },
         "debug": {
             "attendees": [u.username for u in attendees],
             "wishlist_count": len(wishlist_restaurants),
