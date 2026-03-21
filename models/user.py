@@ -5,8 +5,8 @@ from sqlalchemy_serializer import SerializerMixin
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
-    serialize_rules = ("-events_created.created_by", "-password_hash",
-                       "-event_participants.user", "-restaurants.user", "-events_created.participants")
+    serialize_rules = ("-password_hash",
+                       "-event_participants", "-restaurants", "-events_created")
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)

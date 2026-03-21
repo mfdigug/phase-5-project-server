@@ -6,7 +6,7 @@ from datetime import datetime
 class Event(db.Model, SerializerMixin):
     __tablename__ = "events"
 
-    serialize_rules = ("-participants.event",)
+    serialize_rules = ("-participants.event", "-participants.user.events_created")
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
