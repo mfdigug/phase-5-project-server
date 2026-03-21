@@ -4,6 +4,7 @@ from .events import Events
 from .event_participants import EventParticipants, EventParticipantById
 from .restaurants import Restaurants, RestaurantById
 from .user_queries import MyRestaurants, MyEvents
+from .generate_restaurant import GenerateRestaurant
 
 
 # Users
