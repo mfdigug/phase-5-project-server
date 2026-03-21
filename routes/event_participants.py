@@ -12,8 +12,8 @@ class EventParticipants(Resource):
         return make_response(jsonify(event_participants), 200)
 
 class EventParticipantById(Resource):
-    def get(self, id):
-        user_id = session.get(user_id)
+    def patch(self, id):
+        user_id = session.get("user_id")
         if not user_id:
             return make_response(jsonify({"error": "Not logged in"}), 401)
 
