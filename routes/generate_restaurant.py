@@ -47,7 +47,7 @@ class GenerateRestaurant(Resource):
             for restaurant in wishlist_restaurants:
                 score = 0
 
-                price_diff = abs(restaurant.price_range - event.price_filter)
+                price_diff = abs(int(restaurant.price_range) - int(event.price_filter))
                 if price_diff == 0:
                     score += 2
                 elif price_diff == 1:
