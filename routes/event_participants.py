@@ -26,7 +26,7 @@ class EventParticipantById(Resource):
 
         data = request.get_json()
         for attr in data:
-            setattr(ep, attr, date[attr])
+            setattr(ep, attr, data[attr])
 
         db.session.commit()
 
