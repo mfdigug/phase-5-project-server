@@ -1,7 +1,7 @@
 from app import app, api
 from .users import Users, Register, Login, Logout, CheckSession, UserById
 from .events import Events
-from .event_participants import EventParticipants
+from .event_participants import EventParticipants, EventParticipantById
 from .restaurants import Restaurants, RestaurantById
 from .user_queries import MyRestaurants, MyEvents
 
@@ -24,6 +24,7 @@ api.add_resource(Events, '/api/events')
 
 # EventParticipants
 api.add_resource(EventParticipants, '/api/event_participants')
+api.add_resource(EventParticipantById, '/api/event_participants/<int:id>')
 
 # Restaurants
 api.add_resource(Restaurants, '/api/restaurants')
