@@ -39,18 +39,29 @@ class GenerateRestaurant(Resource):
 
         #selection process
         
+        best_score = None
+        best_matches = []
+        scored = []
+
+
         if filtered:
             chosen = random.choice(filtered)
-        else:
-            scored = []
 
+            debug_info = {
+            "selection_type": "filtered",
+            "candidates": [r.name for r in filtered]
+        }
+
+        else:
             for restaurant in wishlist_restaurants:
                 score = 0
 
                 price_diff = abs(int(restaurant.price_range) - int(event.price_filter))
                 if price_diff == 0:
-                    score += 2
+                    score += 3
                 elif price_diff == 1:
+                    score += 2
+                else:
                     score += 1
 
 
@@ -64,6 +75,12 @@ class GenerateRestaurant(Resource):
             best_score = max(score for _, score in scored)
             best_matches = [restaurant for restaurant, score in scored if score == best_score]
             chosen = random.choice(best_matches)
+
+            debug_info = {
+                "selection_type": "scored_random",
+                "best_score": best_score,
+                "candidates": [r.name for r in best_matches]
+            }
 
         event.selected_restaurant = chosen
         db.session.commit()
@@ -81,9 +98,7 @@ class GenerateRestaurant(Resource):
             "attendees": [u.username for u in attendees],
             "wishlist_count": len(wishlist_restaurants),
             "filtered_count": len(filtered),
-            "best_score": best_score,
-            "candidates": [r.name for r in best_matches],
-            "selection_type": "filtered" if filtered else "scored_random"
+            **debug_info
         }
     }), 200)
 
