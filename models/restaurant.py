@@ -16,7 +16,7 @@ class Restaurant(db.Model, SerializerMixin):
     name = db.Column(db.String, nullable=False)
     cuisine = db.Column(db.String)
     location = db.Column(db.String)
-    price_range = db.Column(db.String)
+    price_range = db.Column(db.Integer)
     status = db.Column(db.String, default="wishlist")  # 'wishlist' or 'tried'
     rating = db.Column(db.Integer, nullable=True)
 

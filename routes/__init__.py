@@ -22,6 +22,9 @@ api.add_resource(MyEvents, '/api/my_events')
 # Events
 api.add_resource(Events, '/api/events')
 
+# Generate Restaurant
+api.add_resource(GenerateRestaurant, '/api/events/<int:id>/generate_restaurant')
+
 # EventParticipants
 api.add_resource(EventParticipants, '/api/event_participants')
 api.add_resource(EventParticipantById, '/api/event_participants/<int:id>')
@@ -29,3 +32,5 @@ api.add_resource(EventParticipantById, '/api/event_participants/<int:id>')
 # Restaurants
 api.add_resource(Restaurants, '/api/restaurants')
 api.add_resource(RestaurantById, '/api/restaurants/<int:id>')
+
+
