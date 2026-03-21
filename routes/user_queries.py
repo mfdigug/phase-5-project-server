@@ -44,15 +44,15 @@ class MyEvents(Resource):
             created_events_data.append(event_dict)
 
         invited_events = []
-        for ep in user.event_participants:
-            e = ep.event
+        for my_ep in user.event_participants:
+            e = my_ep.event
             if e.created_by != int(user_id):
                 participants = [
                     {"id": ep.id,
-                    "user_id": p.user_id,
-                    "username": p.user.username if p.user else None,
-                    "rsvp_status": p.rsvp_status}
-                    for p in e.participants
+                    "user_id": ep.user_id,
+                    "username": ep.user.username if ep.user else None,
+                    "rsvp_status": ep.rsvp_status}
+                    for ep in e.participants
                 ]
                 event_dict = e.to_dict()
                 event_dict["participants"] = participants
