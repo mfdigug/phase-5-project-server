@@ -2,7 +2,7 @@ from flask import jsonify, make_response, request, session
 from flask_restful import Resource
 from app import db
 from models import Event, User, EventParticipant, Restaurant
-
+from datetime import datetime
 
 class Events(Resource):
     def get(self):
@@ -14,9 +14,12 @@ class Events(Resource):
     def post(self):
         data = request.get_json()
 
+        date_str = data.get("date")
+        date_obj = datetime.fromisoformat(date_str)
+
         event = Event(
             title=data.get("title"),
-            date=data.get("date"),
+            date=date_obj,
             cuisine_filter=data.get("cuisine_filter"),
             location_filter=data.get("location_filter"),
             price_filter=data.get("price_filter"),
