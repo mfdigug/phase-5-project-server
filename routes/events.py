@@ -47,7 +47,11 @@ class Events(Resource):
         for username in invitee_usernames:
             user = User.query.filter_by(username=username).first()
 
-            if user and use._id != creator_id:
+            if not user:
+                print(f"No user found for username: {username}")
+                continue
+
+            if user.id != creator_id:
                 participants.append(
                     EventParticipant(
                         event=event,
