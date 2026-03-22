@@ -43,13 +43,15 @@ class Events(Resource):
         )
 
         # invitees - set automatically to invited
-        invitee_ids = data.get("invitees", [])
-        for user_id in invitee_ids:
-            if user_id != creator_id:
+        invitee_usernames = data.get("invitees", [])
+        for username in invitee_usernames:
+            user = User.query.filter_by(username=username).first()
+
+            if user and use._id != creator_id:
                 participants.append(
                     EventParticipant(
                         event=event,
-                        user=User.query.get(user_id),
+                        user_id=user.id,
                         rsvp_status="invited"
                     )
                 )
