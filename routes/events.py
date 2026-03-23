@@ -79,5 +79,30 @@ class Events(Resource):
         return make_response(
             jsonify(event_dict), 201
         )
-    
+
+class EventsById(Resource):
+    def get(self, id):      
+        response_dict = Event.query.filter_by(id=id).first().to_dict()
+        
+        return make_response(response_dict, 200)
+
+    def delete(self, id):
+        user_id = session.get("user_id")
+        if not user_id:
+            return make_response(jsonify({"error": "Not logged in"}), 401)
+
+        event = Event.query.filter(Event.id == id).first()
+
+        if not event:
+            return make_response(jsonify({"error": "Event not fount"}), 404)
+
+        if event.created_by != user_id:
+        return make_response(jsonify({"error": "Unauthorised"}), 403)
+
+        db.session.delete(event)
+        db.session.commit()
+
+        return make_response(jsonify({"message": "Deleted"}), 200)
+
+      
 

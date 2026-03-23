@@ -1,6 +1,6 @@
 from app import app, api
 from .users import Users, Register, Login, Logout, CheckSession, UserById
-from .events import Events
+from .events import Events, EventById
 from .event_participants import EventParticipants, EventParticipantById
 from .restaurants import Restaurants, RestaurantById
 from .user_queries import MyRestaurants, MyEvents
@@ -22,6 +22,7 @@ api.add_resource(MyEvents, '/api/my_events')
 
 # Events
 api.add_resource(Events, '/api/events')
+api.add_resource(EventById, '/api/events/<int:id>')
 
 # Generate Restaurant
 api.add_resource(GenerateRestaurant, '/api/events/<int:event_id>/generate_restaurant')

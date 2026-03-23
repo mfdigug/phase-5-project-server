@@ -66,3 +66,13 @@ class RestaurantById(Resource):
             200
         )
     
+    def delete(self, id):
+        restaurant = Restaurant.query.filter(Restaurant.id == id).first()
+
+        if not restaurant:
+            return make_response(jsonify({"error": "Restaurant not fount"}), 404)
+
+        db.session.delete(restaurant)
+        db.session.commit()
+
+        return make_response(jsonify({"message": "Deleted"}), 200)
