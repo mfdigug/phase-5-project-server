@@ -63,8 +63,21 @@ class Events(Resource):
         db.session.add_all(participants)
         db.session.commit()
 
+        participants_data = [
+            {
+                "id": ep.id,
+                "user_id": ep.user_id,
+                "username": ep.user.username if ep.user else None,
+                "rsvp_status": ep.rsvp_status
+            }
+            for ep in event.participants
+        ]
+
+        event_dict = event.to_dict()
+        event_dict["participants"] = participants_data
+
         return make_response(
-            jsonify(event.to_dict()), 201
+            jsonify(event_dict), 201
         )
     
 
