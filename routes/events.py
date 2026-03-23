@@ -97,7 +97,7 @@ class EventsById(Resource):
             return make_response(jsonify({"error": "Event not found"}), 404)
 
         if event.created_by != user_id:
-        return make_response(jsonify({"error": "Unauthorised"}), 403)
+            return make_response(jsonify({"error": "Unauthorised"}), 403)
 
         db.session.delete(event)
         db.session.commit()
