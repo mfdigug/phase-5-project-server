@@ -56,6 +56,10 @@ class MyEvents(Resource):
                 ]
                 event_dict = e.to_dict()
                 event_dict["participants"] = participants
+                event_dict["selected_restaurant"] = (
+                    e.selected_restaurant.to_dict()
+                    if e.selected_restaurant else None
+                )
                 invited_events.append(event_dict)
 
         return make_response(
