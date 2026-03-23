@@ -94,7 +94,7 @@ class EventsById(Resource):
         event = Event.query.filter(Event.id == id).first()
 
         if not event:
-            return make_response(jsonify({"error": "Event not fount"}), 404)
+            return make_response(jsonify({"error": "Event not found"}), 404)
 
         if event.created_by != user_id:
         return make_response(jsonify({"error": "Unauthorised"}), 403)

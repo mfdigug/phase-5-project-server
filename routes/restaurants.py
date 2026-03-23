@@ -67,6 +67,7 @@ class RestaurantById(Resource):
         )
     
     def delete(self, id):
+        print("🔥 DELETE METHOD HIT")
         restaurant = Restaurant.query.filter(Restaurant.id == id).first()
 
         if not restaurant:
