@@ -80,7 +80,7 @@ class Events(Resource):
             jsonify(event_dict), 201
         )
 
-class EventsById(Resource):
+class EventById(Resource):
     def get(self, id):      
         response_dict = Event.query.filter_by(id=id).first().to_dict()
         
