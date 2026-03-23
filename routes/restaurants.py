@@ -65,13 +65,13 @@ class RestaurantById(Resource):
             restaurant.to_dict(),
             200
         )
-    
+        
     def delete(self, id):
-        print("🔥 DELETE METHOD HIT")
+        
         restaurant = Restaurant.query.filter(Restaurant.id == id).first()
 
         if not restaurant:
-            return make_response(jsonify({"error": "Restaurant not fount"}), 404)
+            return make_response(jsonify({"error": "Restaurant not found"}), 404)
 
         db.session.delete(restaurant)
         db.session.commit()
