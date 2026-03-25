@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_dance.contrib.google import make_google_blueprint, google
+from models import User
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
@@ -64,15 +65,28 @@ import routes
 
 @app.route("/login/success")
 def login_success():
-    session["user_id"] = 123
+    if not google.authorized:
+        return redirect("http://localhost:5173/login")
 
-    print("SESSION AFTER SET:", dict(session))
+    resp = google.get("/oauth2/v2/userinfo")
+    user_info = resp.json()
+
+    email = user_info.get("email")
+
+    username = email.split("@")[0]
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        user = User(
+            email=email,
+            username=username
+        )
+        db.session.add(user)
+        db.session.commit()
+
+    session["user_id"] = user.id
 
     return redirect("http://localhost:5173/dashboard")
 
-@app.route("/debug_session")
-def debug_session():
-    return {
-        "session": dict(session),
-        "user_id": session.get("user_id")
-    }
+
