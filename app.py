@@ -66,30 +66,9 @@ import routes
 
 @app.route("/login/success")
 def login_success():
-    if not google.authorized:
-        return {"error": "Google login failed"}, 401
+    session["user_id"] = 123
 
-    resp = google.get("/oauth2/v2/userinfo")
-
-    if not resp.ok:
-        return {"error": "Failed to fetch user info from Google"}, 400
-
-
-    user_info = resp.json()
-
-    from models import User 
-
-    user = User.query.filter_by(email=user_info["email"]).first()
-
-    if not user:
-        user = User(
-            username=user_info["email"].split("@")[0],
-            email=user_info["email"]
-        )
-        db.session.add(user)
-        db.session.commit()
-
-    session["user_id"] = user.id
+    print("SESSION AFTER SET:", dict(session))
 
     return redirect("http://localhost:5173/dashboard")
 
