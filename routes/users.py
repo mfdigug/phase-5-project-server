@@ -1,6 +1,6 @@
 from flask import jsonify, make_response, request, session
 from flask_restful import Resource
-from app import db
+from app import db, app
 from sqlalchemy.exc import IntegrityError
 from models import User
 from flask_dance.contrib.google import google
@@ -94,27 +94,27 @@ class Logout(Resource):
     
 
 
-class GoogleLogin(Resource):
-    def get(self):
-        if not google.authorized:
-            return redirect(url_for("google.login"))
-        
-        response = google.get("/oauth2/v1/userinfo")
-        user_info = response.json()
-        base_username = user_info["email"].split("@")[0]
+@app.route("/api/google_login")
+def google_login():
+    if not google.authorized:
+        return redirect(url_for("google.login"))
+    
+    response = google.get("/oauth2/v1/userinfo")
+    user_info = response.json()
+    base_username = user_info["email"].split("@")[0]
 
-        user = User.query.filter_by(email=user_info["email"]).first()
+    user = User.query.filter_by(email=user_info["email"]).first()
 
-        if not user:
-            username = base_username
-            user = User(
-                username=username,
-                email=user_info["email"]
-            )
+    if not user:
+        username = base_username
+        user = User(
+            username=username,
+            email=user_info["email"]
+        )
 
-            db.session.add(user)
-            db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
-        session["user_id"] = user.id
+    session["user_id"] = user.id
 
-        return redirect("http://localhost:5173/dashboard")
+    return redirect("http://localhost:5173/dashboard")

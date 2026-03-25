@@ -1,6 +1,5 @@
 from app import app, api
-from .users import Users, Register, Login, Logout, CheckSession, UserById, GoogleLogin
-from .events import Events, EventById
+from .users import Users, Register, Login, Logout, CheckSession, UserById
 from .event_participants import EventParticipants, EventParticipantById
 from .restaurants import Restaurants, RestaurantById
 from .user_queries import MyRestaurants, MyEvents
@@ -14,7 +13,6 @@ api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
 api.add_resource(CheckSession, '/api/check_session')
 api.add_resource(UserById, '/api/users/<int:id>')
-api.add_resource(GoogleLogin, "/api/google_login")
 
 # UserQueries
 api.add_resource(MyRestaurants, '/api/my_restaurants')
