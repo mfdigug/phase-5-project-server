@@ -1,5 +1,5 @@
 from app import app, api
-from .users import Users, Register, Login, Logout, CheckSession, UserById
+from .users import *
 from .events import Events, EventById
 from .event_participants import EventParticipants, EventParticipantById
 from .restaurants import Restaurants, RestaurantById
