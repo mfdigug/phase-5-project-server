@@ -14,6 +14,7 @@ api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
 api.add_resource(CheckSession, '/api/check_session')
 api.add_resource(UserById, '/api/users/<int:id>')
+api.add_resource(GoogleLogin, '/api/google_login')
 
 # UserQueries
 api.add_resource(MyRestaurants, '/api/my_restaurants')

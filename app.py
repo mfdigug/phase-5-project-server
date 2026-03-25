@@ -1,13 +1,17 @@
 import os
 
 from flask import Flask, request, session, jsonify, redirect, url_for
+from models import User
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
-from flask_restful import Api
 from flask_migrate import Migrate
+from flask_restful import Api
+
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+
 from flask_dance.contrib.google import make_google_blueprint, google
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
@@ -49,31 +53,6 @@ migrate = Migrate(app, db)
 db.init_app(app)
 bcrypt = Bcrypt(app)
 CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
-
-@app.route("/api/google_login")
-def google_login():
-    if not google.authorized:
-        return redirect(url_for("google.login"))
-    
-    response = google.get("/oauth2/v1/userinfo")
-    user_info = response.json()
-    base_username = user_info["email"].split("@")[0]
-
-    user = User.query.filter_by(email=user_info["email"]).first()
-
-    if not user:
-        username = base_username
-        user = User(
-            username=username,
-            email=user_info["email"]
-        )
-
-        db.session.add(user)
-        db.session.commit()
-
-    session["user_id"] = user.id
-
-    return redirect("http://localhost:5173/dashboard")
 
 api = Api(app)
 import routes

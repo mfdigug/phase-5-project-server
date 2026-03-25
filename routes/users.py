@@ -1,4 +1,4 @@
-from flask import jsonify, make_response, request, session
+from flask import jsonify, make_response, request, session, redirect, url_for
 from flask_restful import Resource
 from app import db
 from sqlalchemy.exc import IntegrityError
@@ -91,6 +91,32 @@ class Logout(Resource):
         session.pop('user_id', None)
         
         return {}, 204
-    
+
+
+class GoogleLogin(Resource):
+    def get(self):
+        
+        if not google.authorized:
+            return redirect(url_for("google.login"))
+        
+        response = google.get("/oauth2/v1/userinfo")
+        user_info = response.json()
+        base_username = user_info["email"].split("@")[0]
+
+        user = User.query.filter_by(email=user_info["email"]).first()
+
+        if not user:
+            username = base_username
+            user = User(
+                username=username,
+                email=user_info["email"]
+            )
+
+            db.session.add(user)
+            db.session.commit()
+
+        session["user_id"] = user.id
+
+        return redirect("http://localhost:5173/dashboard")
 
 
