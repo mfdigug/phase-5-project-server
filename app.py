@@ -18,8 +18,10 @@ app.config['GOOGLE_OAUTH_CLIENT_SECRET'] = os.environ.get('GOOGLE_OAUTH_CLIENT_S
 google_bp = make_google_blueprint(scope=["profile", "email"])
 app.register_blueprint(google_bp, url_prefix="/login")
 
-app.config['SESSION_COOKIE_SAMESITE'] = "None"
-app.config['SESSION_COOKIE_SECURE'] = True
+app.config["SESSION_TYPE"] = "filesystem" #remove before deploy to prod
+app.config["SESSION_COOKIE_DOMAIN"] = None #remove before deploy to prod
+app.config['SESSION_COOKIE_SAMESITE'] = "Lax" #change back to "None" for deploy
+app.config['SESSION_COOKIE_SECURE'] = False #change back to True for deploy
 
 app.json.compact = False
 
