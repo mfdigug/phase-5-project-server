@@ -59,7 +59,7 @@ CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
 
 api = Api(app)
-import routes
+
 
 
 
@@ -90,3 +90,4 @@ def login_success():
     return redirect("http://localhost:5173/dashboard")
 
 
+import routes
