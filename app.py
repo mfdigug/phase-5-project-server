@@ -26,8 +26,8 @@ app.register_blueprint(google_bp, url_prefix="/login")
 
 app.config["SESSION_TYPE"] = "filesystem" #remove before deploy to prod
 app.config["SESSION_COOKIE_DOMAIN"] = None #remove before deploy to prod
-app.config['SESSION_COOKIE_SAMESITE'] = "Lax" #change back to "None" for deploy
-app.config['SESSION_COOKIE_SECURE'] = False #change back to True for deploy
+app.config['SESSION_COOKIE_SAMESITE'] = "None" 
+app.config['SESSION_COOKIE_SECURE'] = True
 
 app.json.compact = False
 
