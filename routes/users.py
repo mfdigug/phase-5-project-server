@@ -1,6 +1,6 @@
 from flask import jsonify, make_response, request, session, redirect, url_for
 from flask_restful import Resource
-from app import db, app
+from app import db
 from sqlalchemy.exc import IntegrityError
 from models import User
 from flask_dance.contrib.google import google
