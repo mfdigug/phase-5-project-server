@@ -50,5 +50,30 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
+@app.route("/api/google_login")
+def google_login():
+    if not google.authorized:
+        return redirect(url_for("google.login"))
+    
+    response = google.get("/oauth2/v1/userinfo")
+    user_info = response.json()
+    base_username = user_info["email"].split("@")[0]
+
+    user = User.query.filter_by(email=user_info["email"]).first()
+
+    if not user:
+        username = base_username
+        user = User(
+            username=username,
+            email=user_info["email"]
+        )
+
+        db.session.add(user)
+        db.session.commit()
+
+    session["user_id"] = user.id
+
+    return redirect("http://localhost:5173/dashboard")
+
 api = Api(app)
 import routes
