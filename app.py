@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_dance.contrib.google import make_google_blueprint, google
-from models import User
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
@@ -74,6 +74,8 @@ def login_success():
     email = user_info.get("email")
 
     username = email.split("@")[0]
+
+    from models import User
 
     user = User.query.filter_by(email=email).first()
 
