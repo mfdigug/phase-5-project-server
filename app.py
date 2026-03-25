@@ -91,3 +91,10 @@ def login_success():
     session["user_id"] = user.id
 
     return redirect("http://localhost:5173/dashboard")
+
+@app.route("/debug_session")
+def debug_session():
+    return {
+        "session": dict(session),
+        "user_id": session.get("user_id")
+    }
