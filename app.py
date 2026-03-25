@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, session, jsonify
+from flask import Flask, request, session, jsonify, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_restful import Api
@@ -19,7 +19,8 @@ google_bp = make_google_blueprint(scope=[
         "openid",
         "https://www.googleapis.com/auth/userinfo.email",
         "https://www.googleapis.com/auth/userinfo.profile"
-    ]
+    ],
+    redirect_to="login_success"
 )
 app.register_blueprint(google_bp, url_prefix="/login")
 
@@ -59,3 +60,34 @@ CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
 api = Api(app)
 import routes
+
+
+
+@app.route("/login/success")
+def login_success():
+    if not google.authorized:
+        return {"error": "Google login failed"}, 401
+
+    resp = google.get("/oauth2/v2/userinfo")
+
+    if not resp.ok:
+        return {"error": "Failed to fetch user info from Google"}, 400
+
+
+    user_info = resp.json()
+
+    from models import User 
+
+    user = User.query.filter_by(email=user_info["email"]).first()
+
+    if not user:
+        user = User(
+            username=user_info["email"].split("@")[0],
+            email=user_info["email"]
+        )
+        db.session.add(user)
+        db.session.commit()
+
+    session["user_id"] = user.id
+
+    return redirect("http://localhost:5173/dashboard")
