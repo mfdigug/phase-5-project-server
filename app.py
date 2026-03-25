@@ -1,24 +1,20 @@
 import os
 
-from flask import Flask, request, session, jsonify, redirect, url_for
-from models import User
+from flask import Flask, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
-from flask_migrate import Migrate
 from flask_restful import Api
-
+from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-
 from flask_dance.contrib.google import make_google_blueprint, google
-
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-app.config['GOOGLE_OAUTH_CLIENT_ID'] = os.environ.get("GOOGLE_OAUTH_CLIENT_ID") #will be set in render
-app.config['GOOGLE_OAUTH_CLIENT_SECRET'] = os.environ.get('GOOGLE_OAUTH_CLIENT_SECRET') #will be set in render
+app.config['GOOGLE_OAUTH_CLIENT_ID'] = os.environ.get("GOOGLE_OAUTH_CLIENT_ID") 
+app.config['GOOGLE_OAUTH_CLIENT_SECRET'] = os.environ.get('GOOGLE_OAUTH_CLIENT_SECRET') 
 google_bp = make_google_blueprint(scope=["profile", "email"])
 app.register_blueprint(google_bp, url_prefix="/login")
 
@@ -53,6 +49,8 @@ migrate = Migrate(app, db)
 db.init_app(app)
 bcrypt = Bcrypt(app)
 CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
+
+
 
 api = Api(app)
 import routes

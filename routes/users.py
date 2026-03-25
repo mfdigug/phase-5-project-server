@@ -95,7 +95,7 @@ class Logout(Resource):
 
 class GoogleLogin(Resource):
     def get(self):
-        
+
         if not google.authorized:
             return redirect(url_for("google.login"))
         

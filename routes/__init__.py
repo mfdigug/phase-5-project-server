@@ -1,4 +1,4 @@
-from app import app, api
+from app import api
 from .users import *
 from .events import Events, EventById
 from .event_participants import EventParticipants, EventParticipantById
