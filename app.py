@@ -29,6 +29,8 @@ app.config['SESSION_COOKIE_SAMESITE'] = "None"
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 
+app.config["PREFERRED_URL_SCHEME"] = "https"
+
 app.json.compact = False
 
 # @app.before_request
@@ -54,7 +56,7 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 bcrypt = Bcrypt(app)
-CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
+CORS(app, supports_credentials=True, origins=["https://localhost:5173"])
 
 
 
@@ -66,7 +68,7 @@ api = Api(app)
 @app.route("/login/success")
 def login_success():
     if not google.authorized:
-        return redirect("http://localhost:5173/login")
+        return redirect("https://localhost:5173/login")
 
     resp = google.get("/oauth2/v2/userinfo")
     user_info = resp.json()
@@ -89,7 +91,7 @@ def login_success():
 
     session["user_id"] = user.id
 
-    return redirect("http://localhost:5173/dashboard")
+    return redirect("https://localhost:5173/dashboard")
 
 
 import routes
