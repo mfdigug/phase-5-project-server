@@ -27,7 +27,7 @@ app.register_blueprint(google_bp, url_prefix="/login")
 
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
 app.config['SESSION_COOKIE_SECURE'] = True
-app.config['SESSION_COOKIE_HTTPONLY'] = True
+
 
 app.config["PREFERRED_URL_SCHEME"] = "https"
 
