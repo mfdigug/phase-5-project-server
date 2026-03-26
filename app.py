@@ -28,7 +28,7 @@ app.register_blueprint(google_bp, url_prefix="/login")
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
 app.config['SESSION_COOKIE_SECURE'] = True
 
-FRONTEND_URL = os.environ.get("https://reliable-kataifi-750975.netlify.app/", "http://localhost:5173")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
 
 
 app.json.compact = False
