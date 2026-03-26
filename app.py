@@ -28,7 +28,7 @@ app.register_blueprint(google_bp, url_prefix="/login")
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
 app.config['SESSION_COOKIE_SECURE'] = True
 
-FRONTEND_URL = os.environ.get("https://69c5b34ae32d204700d794b2--reliable-kataifi-750975.netlify.app", "http://localhost:5173")
+FRONTEND_URL = os.environ.get("https://reliable-kataifi-750975.netlify.app/", "http://localhost:5173")
 
 
 app.json.compact = False
@@ -56,7 +56,7 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 bcrypt = Bcrypt(app)
-CORS(app, supports_credentials=True, origins=["https://localhost:5173", "https://69c5b34ae32d204700d794b2--reliable-kataifi-750975.netlify.app"])
+CORS(app, supports_credentials=True, origins=["https://localhost:5173", "https://reliable-kataifi-750975.netlify.app"])
 
 
 
