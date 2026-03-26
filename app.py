@@ -63,8 +63,6 @@ CORS(app, supports_credentials=True, origins=["https://localhost:5173"])
 api = Api(app)
 
 
-
-
 @app.route("/login/success")
 def login_success():
     if not google.authorized:
@@ -72,26 +70,48 @@ def login_success():
 
     resp = google.get("/oauth2/v2/userinfo")
     user_info = resp.json()
-
     email = user_info.get("email")
-
     username = email.split("@")[0]
 
     from models import User
-
     user = User.query.filter_by(email=email).first()
-
     if not user:
-        user = User(
-            email=email,
-            username=username
-        )
+        user = User(email=email, username=username)
         db.session.add(user)
         db.session.commit()
 
     session["user_id"] = user.id
 
-    return redirect("https://localhost:5173/dashboard")
+    # redirect to frontend login page with param
+    return redirect("https://localhost:5173/login?oauth=success")
+
+# @app.route("/login/success")
+# def login_success():
+#     if not google.authorized:
+#         return redirect("https://localhost:5173/login")
+
+#     resp = google.get("/oauth2/v2/userinfo")
+#     user_info = resp.json()
+
+#     email = user_info.get("email")
+
+#     username = email.split("@")[0]
+
+#     from models import User
+
+#     user = User.query.filter_by(email=email).first()
+
+#     if not user:
+#         user = User(
+#             email=email,
+#             username=username
+#         )
+#         db.session.add(user)
+#         db.session.commit()
+
+#     session["user_id"] = user.id
+
+#     return redirect("https://localhost:5173/dashboard")
 
 
 import routes
