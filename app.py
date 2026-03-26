@@ -25,12 +25,11 @@ google_bp = make_google_blueprint(scope=[
 )
 app.register_blueprint(google_bp, url_prefix="/login")
 
-app.config['SESSION_COOKIE_DOMAIN'] = "localhost"
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
-app.config['SESSION_COOKIE_SECURE'] = False
+app.config['SESSION_COOKIE_SECURE'] = True
 
+FRONTEND_URL = os.environ.get("https://69c5b34ae32d204700d794b2--reliable-kataifi-750975.netlify.app", "http://localhost:5173")
 
-app.config["PREFERRED_URL_SCHEME"] = "https"
 
 app.json.compact = False
 
@@ -57,7 +56,7 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 bcrypt = Bcrypt(app)
-CORS(app, supports_credentials=True, origins=["https://localhost:5173"])
+CORS(app, supports_credentials=True, origins=["https://localhost:5173", "https://69c5b34ae32d204700d794b2--reliable-kataifi-750975.netlify.app"])
 
 
 
@@ -84,7 +83,7 @@ def login_success():
     session["user_id"] = user.id
 
     # redirect to frontend login page with param
-    return redirect("https://localhost:5173/login?oauth=success")
+    return redirect(f"{FRONTEND_URL}/login?oauth=success")
 
 # @app.route("/login/success")
 # def login_success():

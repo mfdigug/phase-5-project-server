@@ -1,3 +1,4 @@
+import os
 from flask import jsonify, make_response, request, session, redirect, url_for
 from flask_restful import Resource
 from app import db
@@ -5,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from models import User
 from flask_dance.contrib.google import google
 
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:5000")
 
 class Users(Resource):
     def get(self):
@@ -95,5 +97,5 @@ class Logout(Resource):
 
 class GoogleLogin(Resource):
     def get(self):
-        return redirect("/login/google")
+        return redirect(f"{BACKEND_URL}/login/google")
         
