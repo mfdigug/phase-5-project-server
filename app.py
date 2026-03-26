@@ -91,7 +91,7 @@ def login_success():
 
     session["user_id"] = user.id
 
-    return redirect("https://localhost:5173/login?oauth=success")
+    return redirect("https://localhost:5173/dashboard")
 
 
 import routes
