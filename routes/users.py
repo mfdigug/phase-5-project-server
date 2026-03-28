@@ -43,8 +43,8 @@ class Register(Resource):
         data = request.get_json()
 
         try:
-            username=data.get("username"),
-            email=data.get("email"),
+            username=data.get("username")
+            email=data.get("email")
             password=data.get("password")
             
             if not username or not email or not password:
@@ -79,7 +79,10 @@ class Register(Resource):
 
         except IntegrityError:
             db.session.rollback()
-            
+            return make_response(
+                jsonify({"error": "Username or email already exists"}), 400
+            )
+        
         except Exception as e:
             db.session.rollback()
 
