@@ -43,11 +43,29 @@ class Register(Resource):
         data = request.get_json()
 
         try:
-            user = User(
-                username=data.get("username"),
-                email=data.get("email")
-            )
+            username=data.get("username"),
+            email=data.get("email"),
+            password=data.get("password")
+            
+            if not username or not email or not password:
+                return make_response(
+                jsonify({"error": "All fields are required"}), 400
+                )
+            
+            if User.query.filter_by(username=username).first():
+                return make_response(
+                    jsonify({"error": "Username already exists"}), 400
+                )
 
+            if User.query.filter_by(email=email).first():
+                return make_response(
+                    jsonify({"error": "Email already registered"}), 400
+                )
+            
+            user = User(
+                username=username,
+                email=email
+            )       
             user.set_password(data["password"])
 
             db.session.add(user)
@@ -61,10 +79,12 @@ class Register(Resource):
 
         except IntegrityError:
             db.session.rollback()
+            
+        except Exception as e:
+            db.session.rollback()
 
             return make_response(
-                jsonify(
-                    {"error": "A user with this username or email already exists"}), 400
+                jsonify({"error": "Something went wrong"}), 500
             )
     
 class Login(Resource):
