@@ -27,6 +27,7 @@ app.register_blueprint(google_bp, url_prefix="/login")
 
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
 app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_DOMAIN'] = None 
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
 
