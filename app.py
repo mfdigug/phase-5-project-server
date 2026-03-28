@@ -26,10 +26,9 @@ google_bp = make_google_blueprint(scope=[
 app.register_blueprint(google_bp, url_prefix="/login")
 
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
-app.config['SESSION_COOKIE_SECURE'] = True
-app.config['SESSION_COOKIE_DOMAIN'] = None 
+app.config['SESSION_COOKIE_SECURE'] = False
 
-FRONTEND_URL = os.environ.get("FRONTEND_URL",  "https://127.0.0.1:5173")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://127.0.0.1:5173")
 
 
 app.json.compact = False
