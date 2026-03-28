@@ -62,7 +62,32 @@ CORS(app, supports_credentials=True, origins=["https://localhost:5173", "https:/
 
 api = Api(app)
 
+# delete for prod:
+@app.route("/api/dev_login/<int:user_id>", methods=["POST"])
+def dev_login(user_id):
 
+    if not app.config.get("DEBUG", False):
+        return jsonify({"error": "Not allowed"}), 403
+
+    from models import User
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    session['user_id'] = user.id
+    session.modified = True  # ensure session updates
+
+    return jsonify({
+        "message": f"Dev logged in as {user.name}",
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email
+        }
+    })
+
+
+# keep
 @app.route("/login/success")
 def login_success():
     if not google.authorized:
