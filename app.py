@@ -114,4 +114,13 @@ def login_success():
     return redirect("https://reliable-kataifi-750975.netlify.app/dashboard")
 
 
+
+@app.route("/api/debug-session")
+def debug_session():
+    return {
+        "user_id": session.get("user_id"),
+        "full_session": dict(session)
+    }
+
+
 import routes
