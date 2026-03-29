@@ -66,7 +66,7 @@ api = Api(app)
 @app.route("/login/success")
 def login_success():
     if not google.authorized:
-        return redirect("https://localhost:5173/login")
+        return redirect("https://reliable-kataifi-750975.netlify.app/login")
 
     resp = google.get("/oauth2/v2/userinfo")
     user_info = resp.json()
