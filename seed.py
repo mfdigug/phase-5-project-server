@@ -22,7 +22,7 @@ with app.app_context():
             email=fake.unique.email(),
             username=fake.unique.user_name()
         )
-        user.set_password("password")
+        user.set_password("P@ssword00")
         users.append(user)
 
     db.session.add_all(users)

@@ -11,24 +11,25 @@ from flask_dance.contrib.google import make_google_blueprint, google
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI', 'sqlite:///dev.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-app.config['GOOGLE_OAUTH_CLIENT_ID'] = os.environ.get("GOOGLE_OAUTH_CLIENT_ID") 
-app.config['GOOGLE_OAUTH_CLIENT_SECRET'] = os.environ.get('GOOGLE_OAUTH_CLIENT_SECRET') 
-google_bp = make_google_blueprint(scope=[
-        "openid",
-        "https://www.googleapis.com/auth/userinfo.email",
-        "https://www.googleapis.com/auth/userinfo.profile"
-    ],
-    redirect_to="login_success"
-)
-app.register_blueprint(google_bp, url_prefix="/login")
+# app.config['GOOGLE_OAUTH_CLIENT_ID'] = os.environ.get("GOOGLE_OAUTH_CLIENT_ID") 
+# app.config['GOOGLE_OAUTH_CLIENT_SECRET'] = os.environ.get('GOOGLE_OAUTH_CLIENT_SECRET') 
+# google_bp = make_google_blueprint(scope=[
+#         "openid",
+#         "https://www.googleapis.com/auth/userinfo.email",
+#         "https://www.googleapis.com/auth/userinfo.profile"
+#     ],
+#     redirect_to="login_success"
+# )
+# app.register_blueprint(google_bp, url_prefix="/login")
 
-app.config['SESSION_COOKIE_SAMESITE'] = "None" 
+app.config['SESSION_COOKIE_SAMESITE'] = "Lax" 
 app.config['SESSION_COOKIE_SECURE'] = False
 
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "https://127.0.0.1:5173")
+
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:5173")
 
 
 app.json.compact = False
@@ -56,38 +57,12 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 bcrypt = Bcrypt(app)
-CORS(app, supports_credentials=True, origins=["https://localhost:5173", "https://reliable-kataifi-750975.netlify.app"])
-
+CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5173", "https://reliable-kataifi-750975.netlify.app"])
 
 
 api = Api(app)
 
-# delete for prod:
-@app.route("/api/dev_login/<int:user_id>", methods=["POST"])
-def dev_login(user_id):
 
-    if not app.config.get("DEBUG", False):
-        return jsonify({"error": "Not allowed"}), 403
-
-    from models import User
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
-    session['user_id'] = user.id
-    session.modified = True  # ensure session updates
-
-    return jsonify({
-        "message": f"Dev logged in as {user.name}",
-        "user": {
-            "id": user.id,
-            "name": user.name,
-            "email": user.email
-        }
-    })
-
-
-# keep
 @app.route("/login/success")
 def login_success():
     if not google.authorized:
