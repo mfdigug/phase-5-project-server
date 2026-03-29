@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, session, jsonify, redirect
+from flask import Flask, make_response, request, session, jsonify, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_restful import Api
@@ -27,6 +27,10 @@ app.register_blueprint(google_bp, url_prefix="/login")
 
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
 app.config['SESSION_COOKIE_SECURE'] = True
+
+# fixing iphone apple safari webkit issue:
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_REFRESH_EACH_REQUEST'] = True
 
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:5173")
@@ -92,9 +96,7 @@ def login_success():
 
     resp = google.get("/oauth2/v2/userinfo")
     user_info = resp.json()
-
     email = user_info.get("email")
-
     username = email.split("@")[0]
 
     from models import User
@@ -111,7 +113,19 @@ def login_success():
 
     session["user_id"] = user.id
 
-    return redirect("https://reliable-kataifi-750975.netlify.app/dashboard")
+    # additional setup to persist cookies
+
+    response = make_response(redirect(f"https://reliable-kataifi-750975.netlify.app//dashboard"))
+    response.set_cookie(
+        key=app.session_cookie_name,
+        value=session.sid if hasattr(session, 'sid') else session.get('user_id'),
+        secure=True,
+        httponly=True,
+        samesite="None",
+        domain=None 
+    )
+
+    return response
 
 
 import routes
