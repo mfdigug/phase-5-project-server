@@ -85,33 +85,33 @@ def login_success():
     # redirect to frontend login page with param
     return redirect(f"{FRONTEND_URL}/login?oauth=success")
 
-@app.route("/login/success")
-def login_success():
-    if not google.authorized:
-        return redirect("https://reliable-kataifi-750975.netlify.app/login")
+# @app.route("/login/success")
+# def login_success():
+#     if not google.authorized:
+#         return redirect("https://reliable-kataifi-750975.netlify.app/login")
 
-    resp = google.get("/oauth2/v2/userinfo")
-    user_info = resp.json()
+#     resp = google.get("/oauth2/v2/userinfo")
+#     user_info = resp.json()
 
-    email = user_info.get("email")
+#     email = user_info.get("email")
 
-    username = email.split("@")[0]
+#     username = email.split("@")[0]
 
-    from models import User
+#     from models import User
 
-    user = User.query.filter_by(email=email).first()
+#     user = User.query.filter_by(email=email).first()
 
-    if not user:
-        user = User(
-            email=email,
-            username=username
-        )
-        db.session.add(user)
-        db.session.commit()
+#     if not user:
+#         user = User(
+#             email=email,
+#             username=username
+#         )
+#         db.session.add(user)
+#         db.session.commit()
 
-    session["user_id"] = user.id
+#     session["user_id"] = user.id
 
-    return redirect("https://reliable-kataifi-750975.netlify.app/dashboard")
+#     return redirect("https://reliable-kataifi-750975.netlify.app/dashboard")
 
 
 import routes
