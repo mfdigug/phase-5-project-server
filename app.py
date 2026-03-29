@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, make_response, request, session, jsonify, redirect
+from flask import Flask, request, session, jsonify, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_restful import Api
@@ -113,19 +113,7 @@ def login_success():
 
     session["user_id"] = user.id
 
-    # additional setup to persist cookies
-
-    response = make_response(redirect(f"https://reliable-kataifi-750975.netlify.app//dashboard"))
-    response.set_cookie(
-        key=app.session_cookie_name,
-        value=session.sid if hasattr(session, 'sid') else session.get('user_id'),
-        secure=True,
-        httponly=True,
-        samesite="None",
-        domain=None 
-    )
-
-    return response
+    return redirect("https://reliable-kataifi-750975.netlify.app/dashboard")
 
 
 import routes
