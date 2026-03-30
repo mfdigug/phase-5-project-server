@@ -110,7 +110,7 @@ def login_success():
 
     session["user_id"] = user.id
 
-    return redirect("https://reliable-kataifi-750975.netlify.app/dashboard")
+    return redirect("https://reliable-kataifi-750975.netlify.app/dashboard/restaurants/wishlist")
 
 
 import routes

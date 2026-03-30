@@ -17,7 +17,6 @@ class Users(Resource):
         users = query.all()
         return jsonify([{"id": u.id, "username": u.username} for u in users])
 
-
 class UserById(Resource):
     def get(self, id):
         user = User.query.filter_by(id=id).first()
@@ -26,6 +25,15 @@ class UserById(Resource):
             return make_response({"error": "User not found"}, 404)
         
         return make_response(jsonify(user.to_dict()), 200)
+    
+    def delete(self, user_id):
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        db.session.delete(user)
+        db.session.commit()
+        return make_response(jsonify({"message": f"User {user_id} deleted successfully"}), 200)
 
 
 class CheckSession(Resource):
