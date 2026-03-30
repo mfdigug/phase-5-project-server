@@ -28,9 +28,6 @@ app.register_blueprint(google_bp, url_prefix="/login")
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
 app.config['SESSION_COOKIE_SECURE'] = True
 
-# fixing iphone apple safari webkit issue:
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_REFRESH_EACH_REQUEST'] = True
 
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:5173")
