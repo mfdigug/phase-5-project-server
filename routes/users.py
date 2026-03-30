@@ -10,9 +10,12 @@ BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:5000")
 
 class Users(Resource):
     def get(self):
-        users = [user.to_dict()
-                 for user in User.query.all()]
-        return make_response(jsonify(users), 200)
+        search = request.args.get("search", "").strip()
+        query = User.query
+        if search:
+            query = query.filter(User.username.ilike(f"%{search}%"))
+        users = query.all()
+        return jsonify([{"id": u.id, "username": u.username} for u in users])
 
 
 class UserById(Resource):
