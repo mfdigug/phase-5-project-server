@@ -16,6 +16,7 @@ flask-bcrypt = "*"
 flask-login = "*"
 flask-dance = "*"
 flask-cors = "*"
+flask-mail = "*"
 
 [dev-packages]
 
