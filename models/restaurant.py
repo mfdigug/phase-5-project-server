@@ -19,7 +19,7 @@ class Restaurant(db.Model, SerializerMixin):
 
     rating = db.Column(db.Float)
     website = db.Column(db.String)
-
+    price_level = db.Column(db.Integer, nullable=True)
     photo_refs = db.Column(db.JSON)
 
     cuisine_override = db.Column(db.String, nullable=True)

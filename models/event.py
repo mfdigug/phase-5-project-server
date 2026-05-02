@@ -13,8 +13,9 @@ class Event(db.Model, SerializerMixin):
     date = db.Column(db.DateTime, nullable=False)
     # takes date fromReact frontend (string ISO 8601 format, e.g., "2026-03-15T14:30" handle formatting date in route).
     cuisine_filter = db.Column(db.String)
-    location_filter = db.Column(db.String)
     price_filter = db.Column(db.Integer)
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
 
     created_by = db.Column(db.Integer, db.ForeignKey("users.id"))
 
