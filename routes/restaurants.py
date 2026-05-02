@@ -19,13 +19,22 @@ class Restaurants(Resource):
 
         try:
             restaurant = Restaurant(
+                # Google Places identity
+                google_place_id=data.get("google_place_id"),
+
+                # Core fields
                 name=data.get("name"),
-                cuisine=data.get("cuisine"),
-                location=data.get("location"),
-                price_range=data.get("price_range"),
-                status=data.get("status", "wishlist"),
+                address=data.get("address"),
+                lat=data.get("lat"),
+                lng=data.get("lng"),
+
                 rating=data.get("rating"),
-                suggested_by=data.get("suggested_by")
+                website=data.get("website"),
+                photo_refs=data.get("photo_refs"),
+
+                # Enrichment fields only
+                cuisine_override=data.get("cuisine_override"),
+                price_level=data.get("price_level")
             )
 
             db.session.add(restaurant)
@@ -39,7 +48,7 @@ class Restaurants(Resource):
             db.session.rollback()
 
             return make_response(
-                jsonify({"error": "You already added this restaurant"}), 400
+                jsonify({"error": "Restaurant already exists (google_place_id conflict)"}), 400
             )
 
 
@@ -50,30 +59,3 @@ class RestaurantById(Resource):
         
         response = make_response(response_dict, 200)
         return response
-    
-    def patch(self, id):
-        restaurant = Restaurant.query.filter(Restaurant.id == id).first()
-
-        data = request.get_json()
-
-        for attr in data:
-            setattr(restaurant, attr, data[attr])
-
-        db.session.commit()
-
-        return make_response(
-            restaurant.to_dict(),
-            200
-        )
-        
-    def delete(self, id):
-        
-        restaurant = Restaurant.query.filter(Restaurant.id == id).first()
-
-        if not restaurant:
-            return make_response(jsonify({"error": "Restaurant not found"}), 404)
-
-        db.session.delete(restaurant)
-        db.session.commit()
-
-        return make_response(jsonify({"message": "Deleted"}), 200)
