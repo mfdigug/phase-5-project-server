@@ -21,10 +21,13 @@ class Events(Resource):
             title=data.get("title"),
             date=date_obj,
             cuisine_filter=data.get("cuisine_filter"),
-            location_filter=data.get("location_filter"),
             price_filter=data.get("price_filter"),
+
+            # geo coordinates
+            latitude=data.get("latitude"),
+            longitude=data.get("longitude"),
+
             created_by=data.get("created_by"),
-            selected_restaurant=None
         )
 
         db.session.add(event)
@@ -82,9 +85,12 @@ class Events(Resource):
 
 class EventById(Resource):
     def get(self, id):      
-        response_dict = Event.query.filter_by(id=id).first().to_dict()
-        
-        return make_response(response_dict, 200)
+        event = Event.query.get(id)
+
+        if not event:
+            return {"error": "Event not found"}, 404
+
+        return event.to_dict(), 200
 
     def delete(self, id):
         user_id = session.get("user_id")
