@@ -18,13 +18,14 @@ class Event(db.Model, SerializerMixin):
 
     created_by = db.Column(db.Integer, db.ForeignKey("users.id"))
 
-    selected_restaurant_id = db.Column(
-        db.Integer,
-        db.ForeignKey("restaurants.id")
+    # relationships
+
+    event_restaurants = db.relationship(
+    "EventRestaurant",
+    back_populates="event",
+    cascade="all, delete-orphan"
     )
-
-    selected_restaurant = db.relationship("Restaurant")
-
+    
     participants = db.relationship(
         "EventParticipant",
         back_populates="event",

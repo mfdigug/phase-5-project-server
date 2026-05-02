@@ -13,8 +13,6 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String)   # for email/password login
 
-    restaurants = db.relationship(
-        "Restaurant", back_populates="user", cascade="all, delete-orphan")
     event_participants = db.relationship("EventParticipant",
                                          back_populates="user",
                                          cascade="all, delete-orphan"

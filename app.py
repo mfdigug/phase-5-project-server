@@ -28,27 +28,14 @@ app.register_blueprint(google_bp, url_prefix="/login")
 app.config['SESSION_COOKIE_SAMESITE'] = "None" 
 app.config['SESSION_COOKIE_SECURE'] = True
 
-
+API_KEY = os.getenv("GOOGLE_API_KEY")
+BASE_URL = "https://places.googleapis.com/v1"
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:5173")
 
 
 app.json.compact = False
 
-# @app.before_request
-# def check_if_logged_in():
-#     open_paths = [
-#         '/api/login',
-#         '/api/register',
-#         '/api/check_session'
-#     ]
-
-#     if request.method == "OPTIONS":
-#         return
-
-#     if request.path.startswith("/api") and request.path not in open_paths:
-#         if not session.get('user_id'):
-#             return jsonify({"error": "Unauthorised"}), 401
 
 metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
@@ -64,27 +51,6 @@ CORS(app, supports_credentials=True, origins=["http://127.0.0.1:5173", "https://
 api = Api(app)
 
 
-# @app.route("/login/success")
-# def login_success():
-#     if not google.authorized:
-#         return redirect("https://reliable-kataifi-750975.netlify.app/login")
-
-#     resp = google.get("/oauth2/v2/userinfo")
-#     user_info = resp.json()
-#     email = user_info.get("email")
-#     username = email.split("@")[0]
-
-#     from models import User
-#     user = User.query.filter_by(email=email).first()
-#     if not user:
-#         user = User(email=email, username=username)
-#         db.session.add(user)
-#         db.session.commit()
-
-#     session["user_id"] = user.id
-
-#     # redirect to frontend login page with param
-#     return redirect(f"{FRONTEND_URL}/login?oauth=success")
 
 @app.route("/login/success")
 def login_success():
