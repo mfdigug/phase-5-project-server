@@ -5,16 +5,11 @@ from sqlalchemy_serializer import SerializerMixin
 class Restaurant(db.Model, SerializerMixin):
     __tablename__ = 'restaurants'
 
-    # __table_args__ = (
-    #     db.UniqueConstraint("name", "location", "suggested_by",
-    #                         name="unique_user_restaurant"),
-    # )
-
     serialize_rules = ("-user.restaurants", "-events.selected_restaurant")
 
     id = db.Column(db.Integer, primary_key=True)
 
-    google_place_id = db.Column(db.String, unique=True, nullable=True)
+    google_place_id = db.Column(db.String, unique=True, nullable=False)
 
     # Core google data
     name = db.Column(db.String, nullable=False)

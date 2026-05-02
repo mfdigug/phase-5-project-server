@@ -1,6 +1,6 @@
 from flask import jsonify, make_response, session
 from flask_restful import Resource
-from models import User, Event
+from models import User, Event, UserRestaurant
 
 class MyRestaurants(Resource):
     def get(self):
@@ -13,8 +13,14 @@ class MyRestaurants(Resource):
         if not user:
             return make_response(jsonify({"error": "User not found"}), 404)
 
-    
-        restaurants = [r.to_dict() for r in user.restaurants]
+
+        restaurants = [
+            {"restaurant": ur.restaurant.to_dict(),
+             "status": ur.status,
+             "personal_rating": ur.personal_rating
+             }
+             for ur in user.user_restaurants
+        ]
 
         return make_response(jsonify(restaurants), 200)
 
@@ -39,8 +45,14 @@ class MyEvents(Resource):
                 "rsvp_status": ep.rsvp_status}
                 for ep in e.participants
             ]
+            
             event_dict = e.to_dict()
             event_dict["participants"] = participants
+            
+            event_dict["selected_restaurant"] = (
+                e.selected_restaurant.to_dict()
+                if e.selected_restaurant else None
+            )
             created_events_data.append(event_dict)
 
         invited_events = []
