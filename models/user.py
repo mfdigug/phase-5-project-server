@@ -13,10 +13,17 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String)   # for email/password login
 
+
+    # relationships
     event_participants = db.relationship("EventParticipant",
                                          back_populates="user",
                                          cascade="all, delete-orphan"
                                          )
+    
+    events_created = db.relationship(
+    "Event",
+    back_populates="creator"
+)
 
     # password hashing
 

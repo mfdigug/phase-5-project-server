@@ -33,5 +33,10 @@ class Event(db.Model, SerializerMixin):
         cascade="all, delete-orphan"
     )
 
+    creator = db.relationship(
+    "User",
+    back_populates="events_created"
+    )
+
     def __repr__(self):
         return f'<Event {self.title} | Location {self.location_filter} | Cuisine {self.cuisine_filter} | Price {self.price_filter}>'

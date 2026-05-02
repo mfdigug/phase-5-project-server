@@ -20,5 +20,5 @@ class EventRestaurant(db.Model, SerializerMixin):
     is_selected = db.Column(db.Boolean, default=False)
 
     # relationships
-    event = db.relationship("Event", backref="event_restaurants")
+    event = db.relationship("Event", back_populates="event_restaurants")
     restaurant = db.relationship("Restaurant", back_populates="event_restaurants")
