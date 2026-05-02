@@ -14,7 +14,7 @@ class Restaurant(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    google_place_id = db.Column(db.String, unique=True, nullable=False)
+    google_place_id = db.Column(db.String, unique=True, nullable=True)
 
     # Core google data
     name = db.Column(db.String, nullable=False)
