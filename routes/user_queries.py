@@ -15,7 +15,9 @@ class MyRestaurants(Resource):
 
 
         restaurants = [
-            {"restaurant": ur.restaurant.to_dict(),
+            {
+             "id": ur.id,
+             "restaurant": ur.restaurant.to_dict(),
              "status": ur.status,
              "personal_rating": ur.personal_rating
              }

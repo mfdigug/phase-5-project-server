@@ -6,6 +6,7 @@ from .restaurants import Restaurants, RestaurantById
 from .user_queries import MyRestaurants, MyEvents
 from .generate_restaurant import GenerateRestaurant
 from .user_restaurants import UserRestaurants, UserRestaurantById
+from .google_places import Autocomplete, PlaceDetails, Places, Photo
 
 
 # Users
@@ -20,6 +21,12 @@ api.add_resource(GoogleLogin, '/api/google_login')
 # UserQueries
 api.add_resource(MyRestaurants, '/api/my_restaurants')
 api.add_resource(MyEvents, '/api/my_events')
+
+# GooglePlaces
+api.add_resource(Autocomplete, "/api/autocomplete")
+api.add_resource(PlaceDetails, "/api/place/<string:place_id>")
+api.add_resource(Photo, "/api/photo/<path:photo_name>")
+api.add_resource(Places, "/api/places")
 
 # UserRestaurants
 api.add_resource(UserRestaurants, '/api/user_restaurants')
