@@ -33,7 +33,8 @@ class Autocomplete(Resource):
             "X-Goog-FieldMask": (
                 "suggestions.placePrediction.placeId,"
                 "suggestions.placePrediction.text,"
-                "suggestions.placePrediction.structuredFormat"
+                "suggestions.placePrediction.structuredFormat,"
+                "suggestions.placePrediction.types"
             )
         }
 
@@ -49,9 +50,13 @@ class Autocomplete(Resource):
                         "latitude": float(lat),
                         "longitude": float(lng)
                     },
-                    "radius": 50000
+                    "radius": 10000
                 }
             }
+        
+        body["languageCode"] = "en"
+        body["regionCode"] = "AU"
+        body["includedPrimaryTypes"] = ["restaurant", "cafe", "bakery", "meal_takeaway"]
 
         res = requests.post(url, json=body, headers=headers)
 

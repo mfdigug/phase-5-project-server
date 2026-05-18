@@ -30,7 +30,10 @@ class Restaurants(Resource):
 
                 rating=data.get("rating"),
                 website=data.get("website"),
-                photo_refs=data.get("photo_refs"),
+                photo_refs=[
+                    p if isinstance(p, str) else p.get("name")
+                    for p in (data.get("photo_refs") or [])
+                ][:3],
 
                 # Enrichment fields only
                 cuisine_override=data.get("cuisine_override"),
