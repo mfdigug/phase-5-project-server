@@ -14,6 +14,8 @@ The app combines **React** on the frontend with a **Flask** backend, integrating
 
 This is the repo and code for the Flask backend.
 You will be able to find the front end repo here: [GitHub Repo Phase 5 Project Client](https://github.com/mfdigug/phase-5-project-client)
+You can see the video showing how the app operates here: [DinnerDecider Demo Video]
+(https://youtu.be/BIpvjqThPIo)
 
 ---
 
