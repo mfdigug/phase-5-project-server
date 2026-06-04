@@ -1,8 +1,8 @@
-"""create tables users, restaurants, events, event_participants
+"""baseline
 
-Revision ID: 2c0ab0128fd0
+Revision ID: ca2cf8fe9a82
 Revises: 
-Create Date: 2026-03-15 21:09:21.980538
+Create Date: 2026-06-04 13:25:00.914469
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2c0ab0128fd0'
+revision = 'ca2cf8fe9a82'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,7 +32,7 @@ def upgrade():
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('cuisine', sa.String(), nullable=True),
     sa.Column('location', sa.String(), nullable=True),
-    sa.Column('price_range', sa.String(), nullable=True),
+    sa.Column('price_range', sa.Integer(), nullable=True),
     sa.Column('status', sa.String(), nullable=True),
     sa.Column('rating', sa.Integer(), nullable=True),
     sa.Column('suggested_by', sa.Integer(), nullable=True),
