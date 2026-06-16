@@ -39,4 +39,4 @@ class Event(db.Model, SerializerMixin):
     )
 
     def __repr__(self):
-        return f'<Event {self.title} | Location {self.location_filter} | Cuisine {self.cuisine_filter} | Price {self.price_filter}>'
+        return f'<Event {self.title} | Lat {self.latitude} | Lng {self.longitude} | Cuisine {self.cuisine_filter} | Price {self.price_filter}>'
