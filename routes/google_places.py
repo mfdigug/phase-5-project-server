@@ -10,6 +10,45 @@ from models import Restaurant, UserRestaurant
 API_KEY = os.getenv("GOOGLE_API_KEY")
 BASE_URL = "https://places.googleapis.com/v1"
 
+def infer_cuisine_from_types(types): 
+    cuisine_map = {
+        "chinese_restaurant": "Chinese",
+        "italian_restaurant": "Italian",
+        "korean_restaurant": "Korean",
+        "japanese_restaurant": "Japanese",
+        "thai_restaurant": "Thai",
+        "indian_restaurant": "Indian",
+        "mexican_restaurant": "Mexican",
+        "vietnamese_restaurant": "Vietnamese",
+        "greek_restaurant": "Greek",
+
+        "lebanese_restaurant": "Lebanese",
+        "turkish_restaurant": "Turkish",
+        "middle_eastern_restaurant": "Middle Eastern",
+
+        "pakistani_restaurant": "Pakistani",
+        "afghani_restaurant": "Afghani",
+
+        "french_restaurant": "French",
+        "spanish_restaurant": "Spanish",
+
+        "american_restaurant": "American",
+        "brazilian_restaurant": "Brazilian",
+
+        "malaysian_restaurant": "Malaysian",
+        "indonesian_restaurant": "Indonesian",
+
+        "seafood_restaurant": "Seafood",
+        "vegetarian_restaurant": "Vegetarian",
+        "vegan_restaurant": "Vegan",
+    }
+
+    for place_type in types or []:
+        if place_type in cuisine_map:
+            return cuisine_map[place_type]
+
+    return None
+
 
 class Autocomplete(Resource):
     def get(self):
@@ -107,6 +146,7 @@ class PlaceDetails(Resource):
 
         res = requests.get(url, headers=headers)
         data = res.json()
+        print("PLACE TYPES:", data.get("types"))
 
         
 
@@ -120,6 +160,7 @@ class PlaceDetails(Resource):
             "rating": data.get("rating"),
             "priceLevel": data.get("priceLevel"),
             "types": data.get("types", []),
+            "inferredCuisine": infer_cuisine_from_types(data.get("types", [])),
             "photos": photos,
             "website": data.get("websiteUri"),
             "mapsLink": data.get("googleMapsUri"),
