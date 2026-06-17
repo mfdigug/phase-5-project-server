@@ -113,8 +113,6 @@ class PlaceDetails(Resource):
         photos = data.get("photos") or []
         photos = photos[:5]
 
-        print("PHOTOS:", data.get("photos"))
-
         return {
             "id": data.get("id"),
             "name": data.get("displayName", {}).get("text"),
