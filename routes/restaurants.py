@@ -34,6 +34,16 @@ class Restaurants(Resource):
     def post(self):
         data = request.get_json()
 
+        existing_restaurant = Restaurant.query.filter_by(
+            google_place_id=data.get("google_place_id")
+            ).first()
+
+        if existing_restaurant:
+            return make_response(
+                jsonify(existing_restaurant.to_dict()),
+                200
+            )
+
         try:
             restaurant = Restaurant(
                 # Google Places identity
