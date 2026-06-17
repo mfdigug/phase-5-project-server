@@ -7,9 +7,9 @@ class User(db.Model, SerializerMixin):
 
     serialize_rules = (
     "-password_hash",
-    "-event_participants.user",
-    "-events_created.creator",
-    "-user_restaurants.user",
+    "-event_participants",
+    "-events_created",
+    "-user_restaurants",
 )
 
     id = db.Column(db.Integer, primary_key=True)
