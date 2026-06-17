@@ -4,6 +4,23 @@ from app import db
 from models import Restaurant
 from sqlalchemy.exc import IntegrityError
 
+# price string -> int helper
+def normalize_google_price_level(price_level):
+    price_map = {
+        "PRICE_LEVEL_FREE": 1,
+        "PRICE_LEVEL_INEXPENSIVE": 1,
+        "PRICE_LEVEL_MODERATE": 2,
+        "PRICE_LEVEL_EXPENSIVE": 3,
+        "PRICE_LEVEL_VERY_EXPENSIVE": 4,
+    }
+
+    if price_level is None:
+        return None
+
+    if isinstance(price_level, int):
+        return price_level
+
+    return price_map.get(price_level)
 
 # Restaurants
 class Restaurants(Resource):
@@ -37,7 +54,7 @@ class Restaurants(Resource):
 
                 # Enrichment fields only
                 cuisine_override=data.get("cuisine_override"),
-                price_level=data.get("price_level")
+                price_level=normalize_google_price_level(data.get("price_level"))
             )
 
             db.session.add(restaurant)
