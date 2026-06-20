@@ -2,6 +2,7 @@ from flask import jsonify, make_response, session
 from flask_restful import Resource
 from models import User, Event, UserRestaurant
 
+
 class MyRestaurants(Resource):
     def get(self):
 
@@ -26,6 +27,8 @@ class MyRestaurants(Resource):
 
         return make_response(jsonify(restaurants), 200)
 
+# Use Cases: dashboard events list, Event Context fetching
+
 class MyEvents(Resource):
     def get(self):
         user_id = session.get("user_id")
@@ -36,6 +39,17 @@ class MyEvents(Resource):
         if not user:
             return make_response(jsonify({"error": "User not found"}), 404)
         
+        def get_selected_restaurant(event):
+            selected_event_restaurant = next(
+                (er for er in event.event_restaurants if er.is_selected),
+                None
+            )
+
+            if not selected_event_restaurant:
+                return None
+
+            return selected_event_restaurant.restaurant.to_dict()
+
         created_events = Event.query.filter_by(created_by=user.id).all()
 
         created_events_data = []
@@ -51,10 +65,7 @@ class MyEvents(Resource):
             event_dict = e.to_dict()
             event_dict["participants"] = participants
             
-            event_dict["selected_restaurant"] = (
-                e.selected_restaurant.to_dict()
-                if e.selected_restaurant else None
-            )
+            event_dict["selected_restaurant"] = get_selected_restaurant(e)
             created_events_data.append(event_dict)
 
         invited_events = []
@@ -70,10 +81,7 @@ class MyEvents(Resource):
                 ]
                 event_dict = e.to_dict()
                 event_dict["participants"] = participants
-                event_dict["selected_restaurant"] = (
-                    e.selected_restaurant.to_dict()
-                    if e.selected_restaurant else None
-                )
+                event_dict["selected_restaurant"] = get_selected_restaurant(e)
                 invited_events.append(event_dict)
 
         return make_response(

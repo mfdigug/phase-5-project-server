@@ -62,8 +62,12 @@ class GenerateRestaurant(Resource):
                     score += 1
                 
             if event.cuisine_filter:
+                restaurant_cuisines = restaurant.cuisine_tags or []
 
-                if getattr(restaurant, "cuisine_override", None) == event.cuisine_filter:
+                if not restaurant_cuisines and restaurant.cuisine_override:
+                    restaurant_cuisines = [restaurant.cuisine_override]
+
+                if event.cuisine_filter in restaurant_cuisines:
                     score += 2
             
             if (
@@ -103,7 +107,7 @@ class GenerateRestaurant(Resource):
          "chosen": {
             "id": chosen.id,
             "name": chosen.name,
-            "cuisine": chosen.cuisine_override,
+            "cuisine": chosen.cuisine_tags or [chosen.cuisine_override] if chosen.cuisine_override else ["Restaurant"],
             "location": chosen.address,
             "price_level": chosen.price_level,
             # status = next(
