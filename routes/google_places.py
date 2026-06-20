@@ -10,7 +10,7 @@ from models import Restaurant, UserRestaurant
 API_KEY = os.getenv("GOOGLE_API_KEY")
 BASE_URL = "https://places.googleapis.com/v1"
 
-def infer_cuisine_from_types(types): 
+def infer_cuisines_from_types(types): 
     cuisine_map = {
         "chinese_restaurant": "Chinese",
         "italian_restaurant": "Italian",
@@ -43,11 +43,18 @@ def infer_cuisine_from_types(types):
         "vegan_restaurant": "Vegan",
     }
 
-    for place_type in types or []:
-        if place_type in cuisine_map:
-            return cuisine_map[place_type]
+    cuisines = []
 
-    return None
+    for place_type in types:
+        cuisine = cuisine_map.get(place_type)
+
+        if cuisine and cuisine not in cuisines:
+            cuisines.append(cuisine)
+
+        if len(cuisines) == 3:
+            break
+
+    return cuisines or ["Restaurant"]
 
 
 class Autocomplete(Resource):
@@ -160,7 +167,7 @@ class PlaceDetails(Resource):
             "rating": data.get("rating"),
             "priceLevel": data.get("priceLevel"),
             "types": data.get("types", []),
-            "inferredCuisine": infer_cuisine_from_types(data.get("types", [])),
+            "cuisineTags": infer_cuisines_from_types(data.get("types", [])),
             "photos": photos,
             "website": data.get("websiteUri"),
             "mapsLink": data.get("googleMapsUri"),

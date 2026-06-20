@@ -64,6 +64,7 @@ class Restaurants(Resource):
 
                 # Enrichment fields only
                 cuisine_override=data.get("cuisine_override"),
+                cuisine_tags=data.get("cuisine_tags"),
                 price_level=normalize_google_price_level(data.get("price_level"))
             )
 

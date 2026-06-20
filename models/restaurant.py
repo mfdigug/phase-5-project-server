@@ -23,7 +23,7 @@ class Restaurant(db.Model, SerializerMixin):
     photo_refs = db.Column(db.JSON)
 
     cuisine_override = db.Column(db.String, nullable=True)
-
+    cuisine_tags = db.Column(db.JSON, default=list)
     # relationships
     user_restaurants = db.relationship(
         "UserRestaurant",
