@@ -1,7 +1,7 @@
 from flask import jsonify, make_response, request, session
 from flask_restful import Resource
 from app import db
-from models import Event, User, EventParticipant, Restaurant
+from models import Event, User, EventParticipant, Restaurant, EventRestaurant
 import random
 import math
 
@@ -100,14 +100,34 @@ class GenerateRestaurant(Resource):
         best_matches = [restaurant for restaurant, score in scored if score == best_score]
         chosen = random.choice(best_matches)
 
-        event.selected_restaurant = chosen
-        db.session.commit()
+        # clear previous generated restaurant results for this event
+        event.event_restaurants.clear()
+        db.session.flush()
+
+        # save all scored restaurants through EventRestaurant
+        for restaurant, score in scored:
+            event_restaurant = EventRestaurant(
+                event=event,
+                restaurant=restaurant,
+                score=score,
+                is_selected=(restaurant.id == chosen.id)
+            )
+
+            db.session.add(event_restaurant)
+
+            db.session.commit()
 
         return make_response(jsonify({
          "chosen": {
             "id": chosen.id,
             "name": chosen.name,
-            "cuisine": chosen.cuisine_tags or [chosen.cuisine_override] if chosen.cuisine_override else ["Restaurant"],
+            "cuisine": (
+                chosen.cuisine_tags
+                if chosen.cuisine_tags
+                else [chosen.cuisine_override]
+                if chosen.cuisine_override
+                else ["Restaurant"]
+            ),
             "location": chosen.address,
             "price_level": chosen.price_level,
             # status = next(

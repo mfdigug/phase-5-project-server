@@ -4,6 +4,12 @@ from app import db
 from models import Event, User, EventParticipant, Restaurant
 from datetime import datetime
 
+# Use cases:
+# creating an event: POST /api/events
+# deleting an event: DELETE /api/events/<id>
+# maybe viewing all events/admin testing: GET /api/events
+
+
 class Events(Resource):
     def get(self):
         

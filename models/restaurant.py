@@ -5,7 +5,10 @@ from sqlalchemy_serializer import SerializerMixin
 class Restaurant(db.Model, SerializerMixin):
     __tablename__ = 'restaurants'
 
-    serialize_rules = ("-user.restaurants", "-events.selected_restaurant")
+    serialize_rules = (
+    "-user_restaurants.restaurant",
+    "-event_restaurants.restaurant",
+)
 
     id = db.Column(db.Integer, primary_key=True)
 
