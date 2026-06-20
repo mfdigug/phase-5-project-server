@@ -122,8 +122,14 @@ class Autocomplete(Resource):
         
         body["languageCode"] = "en"
         body["regionCode"] = "AU"
-        body["includedPrimaryTypes"] = ["restaurant", "cafe", "bakery", "meal_takeaway"]
+        
+        autocomplete_type = request.args.get("type", "restaurant")
 
+        if autocomplete_type == "location":
+            body["includedPrimaryTypes"] = ["locality", "sublocality", "administrative_area_level_2"]
+        else:
+            body["includedPrimaryTypes"] = ["restaurant", "cafe", "bakery", "meal_takeaway"]
+        
         res = requests.post(url, json=body, headers=headers)
 
         if res.status_code != 200:
