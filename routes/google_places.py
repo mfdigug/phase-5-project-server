@@ -41,6 +41,26 @@ def infer_cuisines_from_types(types):
         "seafood_restaurant": "Seafood",
         "vegetarian_restaurant": "Vegetarian",
         "vegan_restaurant": "Vegan",
+
+        "mediterranean_restaurant": "Mediterranean",
+        "asian_restaurant": "Asian",
+        "barbecue_restaurant": "Barbecue",
+        "brunch_restaurant": "Brunch",
+        "breakfast_restaurant": "Breakfast",
+        "cafe": "Cafe",
+        "coffee_shop": "Cafe",
+        "sushi_restaurant": "Japanese",
+        "steak_house": "Steakhouse",
+        "hamburger_restaurant": "Burgers",
+        "pizza_restaurant": "Pizza",
+        "fast_food_restaurant": "Fast Food",
+        "meal_takeaway": "Takeaway",
+        "bakery": "Bakery",
+        "dessert_shop": "Dessert",
+        "ice_cream_shop": "Dessert",
+        "bar": "Bar",
+        "pub": "Pub",
+        "wine_bar": "Wine Bar",
     }
 
     cuisines = []
