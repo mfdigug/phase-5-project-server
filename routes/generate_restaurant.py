@@ -116,7 +116,7 @@ class GenerateRestaurant(Resource):
 
             db.session.add(event_restaurant)
 
-            db.session.commit()
+        db.session.commit()
 
         return make_response(jsonify({
          "chosen": {
