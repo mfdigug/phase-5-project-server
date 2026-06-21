@@ -84,17 +84,18 @@ class GenerateRestaurant(Resource):
                     restaurant.lng
                 )
 
-                if dist < 1:
-                    score += 3
-                elif dist < 5:
-                    score += 2
-                elif dist < 10:
-                    score += 1
-                
-            score += random.uniform(0, 0.5)
+                if event.radius_km is not None and dist > event.radius_km:
+                    continue
 
+                
+                
             scored.append((restaurant, score))
 
+        if not scored:
+            return make_response(
+                jsonify({"message": "No restaurants found within selected radius"}),
+                404
+            )
             
         best_score = max(score for _, score in scored)
         best_matches = [restaurant for restaurant, score in scored if score == best_score]
