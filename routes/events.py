@@ -33,6 +33,7 @@ class Events(Resource):
             latitude=data.get("latitude"),
             longitude=data.get("longitude"),
             radius_km=data.get("radius_km"),
+            location_name=data.get("location_name"),
 
             created_by=data.get("created_by"),
         )

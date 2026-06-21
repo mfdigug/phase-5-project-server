@@ -17,6 +17,7 @@ class Event(db.Model, SerializerMixin):
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
     radius_km = db.Column(db.Float, nullable=True)
+    location_name = db.Column(db.String, nullable=True)
 
     created_by = db.Column(db.Integer, db.ForeignKey("users.id"))
 
