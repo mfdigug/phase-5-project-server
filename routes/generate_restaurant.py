@@ -1,8 +1,9 @@
 from flask import jsonify, make_response, request, session
 from flask_restful import Resource
 from app import db
-from models import Event, User, EventParticipant, Restaurant
+from models import Event, User, EventParticipant, Restaurant, EventRestaurant
 import random
+import math
 
 class GenerateRestaurant(Resource):
     def post(self, event_id):
@@ -17,88 +18,132 @@ class GenerateRestaurant(Resource):
 
         wishlist_restaurants = []
         for user in attendees:
-            for restaurant in user.restaurants:
-                if restaurant.status == "wishlist" and restaurant not in wishlist_restaurants:
-                    wishlist_restaurants.append(restaurant)
+            for ur in user.user_restaurants:
+                if ur.status == "wishlist":
+                    restaurant = ur.restaurant
+                    if restaurant not in wishlist_restaurants:
+                        wishlist_restaurants.append(restaurant)
         
         if not wishlist_restaurants:
             return make_response(
                 jsonify({"message": "No wishlist restaurants"}),
                 404
             )
+        
+        def distance_km(lat1, lng1, lat2, lng2):
 
-        filtered = [
-            restaurant for restaurant in wishlist_restaurants
-            if (
-                restaurant.price_range == event.price_filter and
-                restaurant.cuisine == event.cuisine_filter and
-                restaurant.location == event.location_filter
+            R = 6371
+
+            dlat = math.radians(lat2 - lat1)
+            dlng = math.radians(lng2 - lng1)
+
+            a = (
+                math.sin(dlat / 2) ** 2
+                + math.cos(math.radians(lat1))
+                * math.cos(math.radians(lat2))
+                * math.sin(dlng / 2) ** 2
             )
-        ]
-        
 
-        #selection process
+            return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         
-        best_score = None
-        best_matches = []
         scored = []
 
+        for restaurant in wishlist_restaurants:
 
-        if filtered:
-            chosen = random.choice(filtered)
+            score = 0
 
-            debug_info = {
-            "selection_type": "filtered",
-            "candidates": [r.name for r in filtered]
-        }
+            if event.price_filter is not None and restaurant.price_level is not None:
 
-        else:
-            for restaurant in wishlist_restaurants:
-                score = 0
+                diff = abs(restaurant.price_level - event.price_filter)
 
-                price_diff = abs(int(restaurant.price_range) - int(event.price_filter))
-                if price_diff == 0:
+                if diff == 0:
                     score += 3
-                elif price_diff == 1:
-                    score += 2
-                else:
-                    score += 1
-
-
-                if restaurant.cuisine == event.cuisine_filter:
-                    score += 1
-                if restaurant.location == event.location_filter:
+                elif diff == 1:
                     score += 1
                 
-                scored.append((restaurant, score)) #tuple
+            if event.cuisine_filter:
+                restaurant_cuisines = restaurant.cuisine_tags or []
+
+                if not restaurant_cuisines and restaurant.cuisine_override:
+                    restaurant_cuisines = [restaurant.cuisine_override]
+
+                if event.cuisine_filter in restaurant_cuisines:
+                    score += 2
             
-            best_score = max(score for _, score in scored)
-            best_matches = [restaurant for restaurant, score in scored if score == best_score]
-            chosen = random.choice(best_matches)
+            if (
+                event.latitude is not None
+                and event.longitude is not None
+                and restaurant.lat is not None
+                and restaurant.lng is not None
+            ):
 
-            debug_info = {
-                "selection_type": "scored_random",
-                "best_score": best_score,
-                "candidates": [r.name for r in best_matches]
-            }
+                dist = distance_km(
+                    event.latitude,
+                    event.longitude,
+                    restaurant.lat,
+                    restaurant.lng
+                )
 
-        event.selected_restaurant = chosen
+                if event.radius_km is not None and dist > event.radius_km:
+                    continue
+
+                
+                
+            scored.append((restaurant, score))
+
+        if not scored:
+            return make_response(
+                jsonify({"message": "No restaurants found within selected radius"}),
+                404
+            )
+            
+        best_score = max(score for _, score in scored)
+        best_matches = [restaurant for restaurant, score in scored if score == best_score]
+        chosen = random.choice(best_matches)
+
+        # clear previous generated restaurant results for this event
+        event.event_restaurants.clear()
+        db.session.flush()
+
+        # save all scored restaurants through EventRestaurant
+        for restaurant, score in scored:
+            event_restaurant = EventRestaurant(
+                event=event,
+                restaurant=restaurant,
+                score=score,
+                is_selected=(restaurant.id == chosen.id)
+            )
+
+            db.session.add(event_restaurant)
+
         db.session.commit()
 
         return make_response(jsonify({
          "chosen": {
             "id": chosen.id,
             "name": chosen.name,
-            "cuisine": chosen.cuisine,
-            "location": chosen.location,
-            "price_range": chosen.price_range,
-            "status": chosen.status
+            "location": chosen.address,
+            "price_level": chosen.price_level,
+                        "address": chosen.address,
+            "website": chosen.website,
+            "rating": chosen.rating,
+            "photo_refs": chosen.photo_refs or [],
+            "cuisine_tags": chosen.cuisine_tags or [],
+            # "cuisine_override": chosen.cuisine_override,
+            # status = next(
+            #     ur.status
+            #     for ur in user.user_restaurants
+            #     if ur.restaurant_id == chosen.id
+            # )
         },
         "debug": {
             "attendees": [u.username for u in attendees],
             "wishlist_count": len(wishlist_restaurants),
-            "filtered_count": len(filtered),
-            **debug_info
+            "best_score": best_score,
+            "candidates": [
+                {"name": r.name, "score": s}
+                for r, s in scored
+            ]
         }
     }), 200)
 

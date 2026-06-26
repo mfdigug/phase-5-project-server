@@ -1,6 +1,5 @@
-# env files
 .env
-
-# python cache
+instance/
+*.db
 __pycache__/
 *.pyc

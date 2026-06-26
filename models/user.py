@@ -5,20 +5,29 @@ from sqlalchemy_serializer import SerializerMixin
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
-    serialize_rules = ("-password_hash",
-                       "-event_participants", "-restaurants", "-events_created")
+    serialize_rules = (
+    "-password_hash",
+    "-event_participants",
+    "-events_created",
+    "-user_restaurants",
+)
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     username = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String)   # for email/password login
 
-    restaurants = db.relationship(
-        "Restaurant", back_populates="user", cascade="all, delete-orphan")
+
+    # relationships
     event_participants = db.relationship("EventParticipant",
                                          back_populates="user",
                                          cascade="all, delete-orphan"
                                          )
+    
+    events_created = db.relationship(
+    "Event",
+    back_populates="creator"
+)
 
     # password hashing
 

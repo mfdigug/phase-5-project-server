@@ -26,14 +26,14 @@ class UserById(Resource):
         
         return make_response(jsonify(user.to_dict()), 200)
     
-    def delete(self, user_id):
-        user = User.query.get(user_id)
+    def delete(self, id):
+        user = User.query.filter_by(id=id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
         
         db.session.delete(user)
         db.session.commit()
-        return make_response(jsonify({"message": f"User {user_id} deleted successfully"}), 200)
+        return make_response(jsonify({"message": f"User {id} deleted successfully"}), 200)
 
 
 class CheckSession(Resource):
