@@ -122,15 +122,14 @@ class GenerateRestaurant(Resource):
          "chosen": {
             "id": chosen.id,
             "name": chosen.name,
-            "cuisine": (
-                chosen.cuisine_tags
-                if chosen.cuisine_tags
-                else [chosen.cuisine_override]
-                if chosen.cuisine_override
-                else ["Restaurant"]
-            ),
             "location": chosen.address,
             "price_level": chosen.price_level,
+                        "address": chosen.address,
+            "website": chosen.website,
+            "rating": chosen.rating,
+            "photo_refs": chosen.photo_refs or [],
+            "cuisine_tags": chosen.cuisine_tags or [],
+            # "cuisine_override": chosen.cuisine_override,
             # status = next(
             #     ur.status
             #     for ur in user.user_restaurants
