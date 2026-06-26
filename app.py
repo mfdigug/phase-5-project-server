@@ -28,7 +28,7 @@ app.register_blueprint(google_bp, url_prefix="/login")
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:5173",  "http://localhost:5173")
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
 
 app.json.compact = False
 
@@ -45,7 +45,7 @@ bcrypt = Bcrypt(app)
 
 CORS(app, 
     supports_credentials=True, 
-    origins=["https://reliable-kataifi-750975.netlify.app", "http://localhost:5173", "http://127.0.0.1:5173"])
+    origins=[FRONTEND_URL, "http://localhost:5173", "http://127.0.0.1:5173"])
 
 
 api = Api(app)
