@@ -124,7 +124,7 @@ class Logout(Resource):
 
     def delete(self):
 
-        session.pop('user_id', None)
+        session.clear()
         
         return {}, 204
 
