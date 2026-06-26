@@ -29,7 +29,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['restaurant_id'], ['restaurants.id'], name=op.f('fk_user_restaurants_restaurant_id_restaurants')),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_user_restaurants_user_id_users')),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('user_id', 'restaurant_id', name='unique_user_restaurant')
+    sa.UniqueConstraint('user_id', 'restaurant_id', name='unique_user_restaurant_link')
     )
     op.create_table('event_restaurants',
     sa.Column('id', sa.Integer(), nullable=False),

@@ -6,7 +6,7 @@ class UserRestaurant(db.Model, SerializerMixin):
     __tablename__ = "user_restaurants"
 
     __table_args__ = (
-        db.UniqueConstraint("user_id", "restaurant_id", name="unique_user_restaurant"),
+        db.UniqueConstraint("user_id", "restaurant_id", name="unique_user_restaurant_link"),
     )
 
     serialize_rules = (
