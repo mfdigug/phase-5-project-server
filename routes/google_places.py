@@ -83,6 +83,8 @@ class Autocomplete(Resource):
         lat = request.args.get("lat")
         lng = request.args.get("lng")
 
+        autocomplete_type = request.args.get("type", "restaurant")
+
         if not user_input or user_input.strip() == "":
             return {"error": "input required"}, 400
         
@@ -116,14 +118,19 @@ class Autocomplete(Resource):
                         "latitude": float(lat),
                         "longitude": float(lng)
                     },
-                    "radius": 10000
+                    "radius": 50000
                 }
             }
+
+        if autocomplete_type == "location":
+                body["locationBias"] = location_filter
+            else:
+                body["locationRestriction"] = location_filter
         
         body["languageCode"] = "en"
         body["regionCode"] = "AU"
         
-        autocomplete_type = request.args.get("type", "restaurant")
+        
 
         if autocomplete_type == "location":
             body["includedPrimaryTypes"] = ["locality", "sublocality", "administrative_area_level_2"]

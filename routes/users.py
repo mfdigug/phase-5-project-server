@@ -123,9 +123,7 @@ class Login(Resource):
 class Logout(Resource):
 
     def delete(self):
-
         session.clear()
-        
         return {}, 204
 
 
