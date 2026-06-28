@@ -129,7 +129,7 @@ class Autocomplete(Resource):
                 body["locationBias"] = location_filter
         else: 
             if lat and lng:
-            body["locationRestriction"] = location_filter
+                body["locationRestriction"] = location_filter
         
         body["languageCode"] = "en"
         body["regionCode"] = "AU"
