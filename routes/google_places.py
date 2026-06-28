@@ -112,7 +112,7 @@ class Autocomplete(Resource):
         }
 
         if lat and lng:
-            body["locationBias"] = {
+            location_filter = {
                 "circle": {
                     "center": {
                         "latitude": float(lat),
