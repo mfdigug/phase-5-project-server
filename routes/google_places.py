@@ -111,6 +111,8 @@ class Autocomplete(Resource):
             "sessionToken": session_token
         }
 
+        location_filter = None
+
         if lat and lng:
             location_filter = {
                 "circle": {
@@ -123,8 +125,9 @@ class Autocomplete(Resource):
             }
 
         if autocomplete_type == "location":
-            body["locationBias"] = location_filter
-        else:
+            if lat and lng:
+                body["locationBias"] = location_filter
+        if lat and lng:
             body["locationRestriction"] = location_filter
         
         body["languageCode"] = "en"
@@ -137,6 +140,8 @@ class Autocomplete(Resource):
         else:
             body["includedPrimaryTypes"] = ["restaurant", "cafe", "bakery", "meal_takeaway"]
         
+        print(body)
+
         res = requests.post(url, json=body, headers=headers)
 
         if res.status_code != 200:
