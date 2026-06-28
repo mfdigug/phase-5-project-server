@@ -15,7 +15,7 @@ The app combines **React** on the frontend with a **Flask** backend, integrating
 This is the repo and code for the Flask backend.
 You will be able to find the front end repo here: https://github.com/mfdigug/phase-5-project-client
 
-You can also find a demo video here: https://youtu.be/BIpvjqThPIo
+You can also find a demo video here: https://youtu.be/xn57LeVEr4k
 
 ---
 
