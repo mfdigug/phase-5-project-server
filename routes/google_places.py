@@ -123,9 +123,9 @@ class Autocomplete(Resource):
             }
 
         if autocomplete_type == "location":
-                body["locationBias"] = location_filter
-            else:
-                body["locationRestriction"] = location_filter
+            body["locationBias"] = location_filter
+        else:
+            body["locationRestriction"] = location_filter
         
         body["languageCode"] = "en"
         body["regionCode"] = "AU"
