@@ -127,7 +127,8 @@ class Autocomplete(Resource):
         if autocomplete_type == "location":
             if lat and lng:
                 body["locationBias"] = location_filter
-        if lat and lng:
+        else: 
+            if lat and lng:
             body["locationRestriction"] = location_filter
         
         body["languageCode"] = "en"
